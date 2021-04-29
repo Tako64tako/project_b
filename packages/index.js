@@ -4,14 +4,14 @@ var input_key_buffer = new Array();
 // キーボードの入力イベントをトリガーに配列のフラグ値を更新させる
 window.addEventListener("keydown", handleKeydown);
 function handleKeydown(e) {
-  console.log("key down : " + e.keyCode);
-  input_key_buffer[e.keyCode] = true;
+    console.log("key down : " + e.keyCode);
+    input_key_buffer[e.keyCode] = true;
 }
 
 window.addEventListener("keyup", handleKeyup);
 function handleKeyup(e) {
-  console.log("key up : " + e.keyCode);
-  input_key_buffer[e.keyCode] = false;
+    console.log("key up : " + e.keyCode);
+    input_key_buffer[e.keyCode] = false;
 }
 
 // canvas要素の取得

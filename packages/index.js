@@ -8,8 +8,8 @@ addEventListener( 'load', function() {
 	game = new Core(320,320);	//ゲームオブジェクトの作成
     // フレームレートの設定。15fpsに設定
     game.fps = 15;
-    game.preload( 'img/character/Gilbert2.png' );	//画像をプリロード
-    game.preload('img/map/map1.png');
+    game.preload( '../img/character/Gilbert2.png' );	//画像をプリロード
+    game.preload('../img/map/map1.png');
 
     //マップとの接触判定
     function bottom_collisionCheck(mapName,splite){

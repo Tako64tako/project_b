@@ -1,6 +1,7 @@
 // キーボードの入力状態を記録する配列の定義
 var input_key_buffer = new Array();
 
+
 // キーボードの入力イベントをトリガーに配列のフラグ値を更新させる
 window.addEventListener("keydown", handleKeydown);
 function handleKeydown(e) {
@@ -17,7 +18,7 @@ function handleKeyup(e) {
 // canvas要素の取得
 const canvas = document.getElementById("maincanvas");
 const ctx = canvas.getContext("2d");
-
+const ftx = canvas.getContext("2d");
 // 画像を表示するの座標の定義 & 初期化
 var x = 0;
 var y = 0;
@@ -38,6 +39,16 @@ function update() {
   if (input_key_buffer[90]) {
     // 右が押されていればx座標を1増やす
     x = x + 1;
+  }
+
+  //ゴールフラッグの表示
+  var flag_image = new Image();
+  flag_image.src = "../assets/images/flag.jpg";
+  ftx.drawImage(flag_image, 50, 0, 256, 256);
+
+  //クリア判定
+  if(x==50){
+    alert("gameclear");
   }
 
   // 主人公の画像を表示

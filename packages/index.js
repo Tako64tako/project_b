@@ -1,4 +1,5 @@
 // キーボードの入力状態を記録する配列の定義
+enchant();
 var input_key_buffer = new Array();
 
 
@@ -59,3 +60,4 @@ function update() {
   // 再描画
   window.requestAnimationFrame(update);
 }
+ 

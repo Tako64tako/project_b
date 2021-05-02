@@ -78,14 +78,14 @@ addEventListener( 'load', function() {
 
 
         backgroundMap = new Map(16, 16);
-        backgroundMap.image = game.assets['img/map/map1.png'];
+        backgroundMap.image = game.assets['../img/map/map1.png'];
         backgroundMap.loadData(block);
         backgroundMap.collisionData = col_block;
 
 
         var Gilbert = new Sprite(32, 32);
         var Gil_farstposition = [0,140]
-        Gilbert.image = game.assets["img/character/Gilbert2.png"];
+        Gilbert.image = game.assets["../img/character/Gilbert2.png"];
         Gilbert.x = Gil_farstposition[0];
         Gilbert.y = Gil_farstposition[1];
         Gilbert.prey = Gil_farstposition[1];

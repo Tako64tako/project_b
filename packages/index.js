@@ -82,7 +82,12 @@ addEventListener( 'load', function() {
         backgroundMap.loadData(block);
         backgroundMap.collisionData = col_block;
 
-
+        //goalflagの設定
+        var goalflag = new Sprite(32,32);
+        goalflag.image = game.assets["../img/character/Gilbert2.png"];
+        goalflag.x = 200;
+        goalflag.y =240;
+        
         var Gilbert = new Sprite(32, 32);
         var Gil_farstposition = [0,140]
         Gilbert.image = game.assets["../img/character/Gilbert2.png"];
@@ -151,10 +156,19 @@ addEventListener( 'load', function() {
                 Gilbert.jumpFlg = true;
                 Gilbert.jumpPower = 0;
             }
+            //ゴール処理
+            if(Gilbert.x >= goalflag.x && Gilbert.x < goalflag.x+3){
+    
+                alert("gameclear");
+
+            }
         });
+
+
         var stage = new Group();
         stage.addChild(backgroundMap);
         stage.addChild(Gilbert);
+        stage.addChild(goalflag);
         stage.addEventListener(Event.ENTER_FRAME, function(e) {
         if(stage.x > 64 - Gilbert.x)
             stage.x = 64 - Gilbert.x;
@@ -172,5 +186,6 @@ addEventListener( 'load', function() {
         //gil = new Gilbert(0,140);
     }
 
+    
     game.start();	//ゲームスタート
 });

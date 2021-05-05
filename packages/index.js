@@ -125,6 +125,12 @@ addEventListener( 'load', function() {
 
         var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
         var Gil_firstposition = [64,140]//プレイヤーの初期スポーン位置
+        //goalflagの設定
+        var goalflag = new Sprite(32,32);
+        goalflag.image = game.assets["../img/character/Gilbert2.png"];
+        goalflag.x = 200;
+        goalflag.y =240;
+        
         Gilbert.image = game.assets["../img/character/Gilbert2.png"];
         Gilbert.x = Gil_firstposition[0];
         Gilbert.y = Gil_firstposition[1];
@@ -217,14 +223,21 @@ addEventListener( 'load', function() {
                 Gilbert.jumpFlg = true;
                 Gilbert.jumpPower = 0;
             }
-        });
+            //ゴール処理
+            if(Gilbert.x >= goalflag.x && Gilbert.x < goalflag.x+3){
+    
+                alert("gameclear");
 
+            }
+        });
 
         var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
         stage.addChild(backgroundMap);
         stage.addChild(Gilbert);
 
         //プレイヤーのX座標に合わせて画面をスクロール
+        stage.addChild(goalflag);
+    
         stage.addEventListener(Event.ENTER_FRAME, function(e) {
         if(stage.x > 128 - Gilbert.x){
             stage.x = 128 - Gilbert.x;

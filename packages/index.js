@@ -87,6 +87,12 @@ addEventListener( 'load', function() {
         goalflag.image = game.assets["../img/character/Gilbert2.png"];
         goalflag.x = 200;
         goalflag.y =240;
+
+        //弾を打ってから10フレーム後にtrueになる
+        var frame_flag = true;
+        //弾を打ってからフレームを数える
+        var frame_count = 0;
+        
         
         var Gilbert = new Sprite(32, 32);
         var Gil_farstposition = [0,140]
@@ -156,7 +162,53 @@ addEventListener( 'load', function() {
                 Gilbert.jumpFlg = true;
                 Gilbert.jumpPower = 0;
             }
+            
+            //===========================================
+            //弾の発射処理
+            //間隔を10フレーム開けて発射する
+            //
+            //===========================================
+
+            var bullet;
+
+            if(frame_flag==true){
+                //frame_flagがtrueかつaボタン（Zキー）が押された時
+                if ( game.input.a ) {
+                    frame_flag = false
+                    //frame_flagをfalseする
+                    //hitABullet関数を実行
+                    hitABullet();
+                }
+
+            }
+            
+            //上で呼ばれるhitABullet関数作成
+            function hitABullet() {
+                //弾を作成
+                bullet = new Bullet();
+	            stage.addChild( bullet );
+            
+            }
+
+            //前回弾を打ってから10フレーム未満の場合
+            if(frame_flag==false){
+                
+                frame_count = frame_count + 1;
+                
+            }
+
+            //前回弾を打ってから10フレームたった場合
+            if(frame_count == 10){
+
+                frame_flag = true;
+                frame_count = 0;
+
+            }
+
+
+            //===========================================
             //ゴール処理
+            //===========================================
             if(Gilbert.x >= goalflag.x && Gilbert.x < goalflag.x+3){
     
                 alert("gameclear");
@@ -164,8 +216,41 @@ addEventListener( 'load', function() {
             }
         });
 
+        //===========================================
+        //弾のクラス作成
+        //===========================================
+        var Bullet = Class.create( Sprite, {
+            initialize: function() {
+                var bulletX, bulletY;	//弾のX座標とY座標
+                Sprite.call( this, 32, 32 );	//Spriteクラスのメソッドを、thisでも使えるようにする
+                this.image = game.assets["../img/character/Gilbert2.png"];	//スプライトの画像ファイルを指定
+                //プレイヤーの向きによって弾の位置や動かす方向を変える
+                if ( Gilbert.scaleX >= 0 ) {
+                    this.speed = 10;
+                    bulletX = Gilbert.x + 5;
+                } else {
+                    this.speed = -10;
+                    bulletX = Gilbert.x - 5;
+                }
+                bulletY = Gilbert.y + 0;
+                this.moveTo( bulletX, bulletY );	//弾の位置
+            },
+            onenterframe: function() {
 
-        var stage = new Group();
+                this.x += this.speed;	//弾の移動
+
+                //弾の位置が座標で150以上又は0以下になった時に弾を削除
+                if(this.x >= 150 || this.x <= 0){
+
+                    stage.removeChild(this);
+
+                }
+
+            }
+
+        } );
+
+        var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
         stage.addChild(backgroundMap);
         stage.addChild(Gilbert);
         stage.addChild(goalflag);

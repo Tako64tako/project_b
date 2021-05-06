@@ -21,4 +21,3 @@ yarn lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).# project_b
 
-index.htmlをお好みのブラウザで開いてください

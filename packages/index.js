@@ -118,7 +118,7 @@ addEventListener( 'load', function() {
 
 
         backgroundMap = new Map(16, 16);//マップ配置用のクラス
-        backgroundMap.image = game.assets['../img/map/map2.png'];
+        backgroundMap.image = game.assets['../img/map/map1.png'];
         backgroundMap.loadData(block);
         backgroundMap.collisionData = col_block;
 

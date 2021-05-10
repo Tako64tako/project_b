@@ -48,3 +48,55 @@ function update() {
   // 再描画
   window.requestAnimationFrame(update);
 }
+
+// 敵キャラの初期座標を定義
+var enemy1x = 0;
+var enemy1y = 100;
+
+//敵キャラのフレームごとの移動量
+var enemy1dx = 0.5;
+var enemy1dy = 0;
+
+// 座標を更新する
+function sumEnemy1() {
+    if(enemy1x >= canvas.width-28 || enemy1x <= -1){
+        enemy1dx = -enemy1dx;
+    }
+    if(enemy1y >= canvas.height-28 || enemy1y <= -1){
+        enemy1dy = -enemy1dy;
+    }
+}
+
+//敵キャラの画像を表示
+function drawEnemy1() {
+    sumEnemy1();
+    
+    var image = new Image();
+    image.src = "../images/character/enemy1.png";
+    ctx.drawImage(image, enemy1x, enemy1y, 28, 28);
+    
+    enemy1x = enemy1x + enemy1dx;
+    enemy1y = enemy1y + enemy1dy;
+}
+
+var lives = 5;
+
+//残機の表示
+function drawLives() {
+    sumLives();
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("残りマリオ: " +lives+"人", 0, 20);
+}
+
+//残機計算
+function sumLives() {
+    //敵キャラとぶつかった時の処理、とりあえず敵キャラがキャンバスの中心に着いた時カウントするものとする
+    if(enemy1x == canvas.width/2){
+        lives = lives - 1;
+        if(!lives) {
+            alert("もう復活できないや..."); //思いつかなかったから一応書いといた、消すかも
+            document.location.reload(); //ここで最初のページに戻す？
+        }
+    }
+}

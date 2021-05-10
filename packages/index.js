@@ -11,6 +11,8 @@ addEventListener( 'load', function() {
     game.preload( '../img/character/Gilbert2.png' );	//画像をプリロード
     game.preload('../img/map/map1.png');
     game.preload('../img/map/map2.png');
+    game.preload('../img/bullet/icon0.png');
+    game.keybind( 'Z'.charCodeAt(0), 'a' );     //Zキー入力をaボタンとする
 
 
     //マップとの接触判定　いらない
@@ -121,8 +123,8 @@ addEventListener( 'load', function() {
         backgroundMap.image = game.assets['../img/map/map2.png'];
         backgroundMap.loadData(block);
         backgroundMap.collisionData = col_block;
-
-
+        var bullet_count = 0;       //弾の間隔を数える
+        var bullet_flag = true;     //間隔が10フレームあいたかを判断
         var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
         var Gil_firstposition = [64,140]//プレイヤーの初期スポーン位置
         Gilbert.image = game.assets["../img/character/Gilbert2.png"];
@@ -217,7 +219,68 @@ addEventListener( 'load', function() {
                 Gilbert.jumpFlg = true;
                 Gilbert.jumpPower = 0;
             }
+
+            //===========================================
+            //弾を打つ処理
+            //10フレーム間隔で発射できる
+            //===========================================
+            
+            if(bullet_flag==true){
+                if ( game.input.a ) hitABullet();
+            //前に弾を打った時から10フレームが経過かつ'zキーが押された時'
+                var bullet;
+                function hitABullet() {
+	                //弾を作成
+            	    bullet = new Bullet();
+                    scene.addChild( bullet );
+                    bullet_flag = false;
+                    bullet_count = 0;
+ 
+                }
+            }
+
+            if(bullet_flag==false){     //前に弾を打った時から10フレーム立っていない時
+
+                bullet_count++;     //フレームのカウントを行う
+
+            }
+
+            if(bullet_count==10)bullet_flag=true;       //フレームカウントが10になった時、弾を打てるようにする
+
         });
+
+        /**弾のクラス**/
+        var Bullet = Class.create( Sprite, {
+	        initialize: function() {
+            
+		        var bulletX, bulletY;	//弾のX座標とY座標
+		        Sprite.call( this, 16, 16 );	//Spriteクラスのメソッドを、thisでも使えるようにする
+                this.image = game.assets[ '../img/bullet/icon0.png' ];	//スプライトの画像ファイルを指定
+                this.frame = 50
+ 
+		        //プレイヤーの向きによって弾の位置や動かす方向を変える
+		        if ( Gilbert.scaleX >= 0 ) {
+			        this.speed = 10;
+                    bulletX = Gilbert.x + 25 + stage.x;
+                    Gilbert.frame = 59;
+		        } else {
+			        this.speed = -10;
+                    bulletX = Gilbert.x - 9.25 + stage.x;
+                    Gilbert.frame = 59;
+		        }
+		        bulletY = Gilbert.y + 6;
+ 
+		        this.moveTo( bulletX, bulletY );	//弾の位置
+	        },
+	        onenterframe: function() {
+                this.x += this.speed;	//弾の移動
+                if(this.x > Gilbert.x + 200 || this.x < -20){       //弾の削除
+
+                    this.remove();
+
+                }
+            }
+        } );
 
 
         var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）

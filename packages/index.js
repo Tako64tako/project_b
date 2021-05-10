@@ -6,41 +6,41 @@ var game;
 //Webページが読み込まれたら
 addEventListener( 'load', function() {
 	game = new Core(320,320);	//ゲームオブジェクトの作成
-  // フレームレートの設定。15fpsに設定
-    game.fps = 15;//ゲーム画面のフレームレート毎秒１５枚のアニメーションで構成
-	game.preload( '../img/character/Gilbert2.png' );	//画像をプリロード
-    game.preload('../img/map/map1.png');
-  //game.preload('img/map/map2.png');
+    // フレームレートの設定。15fpsに設定
+    game.fps = 15;//ゲーム画面のフレームレート　毎秒１５枚のアニメーションで構成
+    game.preload( 'img/character/Gilbert2.png' );	//画像をプリロード
+    game.preload('img/map/map1.png');
+    game.preload('img/map/map2.png');
 
 
-  //マップとの接触判定いらない
-  /*
-  function bottom_collisionCheck(mapName,splite){
-      if(mapName.hitTest(splite.x+32 ,splite.y + 16 )){
-          console.log("通れない："+ (splite.x + 32));
-          return true;
-      }else{
-          return false;
-      }
-  }
-  */
+    //マップとの接触判定　いらない
+    /*
+    function bottom_collisionCheck(mapName,splite){
+        if(mapName.hitTest(splite.x+32 ,splite.y + 16 )){
+            console.log("通れない："+ (splite.x + 32));
+            return true;
+        }else{
+            return false;
+        }
+    }
+    */
 
-  game.onload = function(){
-      game.pushScene( game.mainScene() );		//シーンをゲームに追加する
+    game.onload = function(){
+        game.pushScene( game.mainScene() );		//シーンをゲームに追加する
 
-  }
+    }
 
 
-  //メインシーン
+    //メインシーン
 	game.mainScene = function() {
 		var scene = new Scene();		//シーンを作成
 		//scene.backgroundColor = '#00BFFF';	//ブロックおいてないとこの色（前まで白色だったとこ）
-        game.rootScene.backgroundColor = '#fcc800';
+        game.rootScene.backgroundColor = 'skyblue';
 
         //========================
         //  マップデータ見栄え用　マップ画像から左上から0,1,0,2.....と表示するマップチップを変更できる
 
-        //map1.png用
+        /*map1.png用
         var block = [
             [35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35],
             [35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35],
@@ -63,8 +63,8 @@ addEventListener( 'load', function() {
             [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         ];
-
-        /*map2.png用
+        */
+        //map2.png用
         var block = [
             [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
             [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
@@ -87,9 +87,9 @@ addEventListener( 'load', function() {
             [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16],
             [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16]
         ];
-        */
 
-        //マップデータ判定用　左端は見えない壁作ってこれ以上行けないように
+
+        //マップデータ判定用　0は背景、1は壁、床などの当たり判定がある。左端は見えない壁作ってこれ以上行けないように
         var col_block = [
             [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
             [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -118,20 +118,14 @@ addEventListener( 'load', function() {
 
 
         backgroundMap = new Map(16, 16);//マップ配置用のクラス
-        backgroundMap.image = game.assets['../img/map/map2.png'];
+        backgroundMap.image = game.assets['img/map/map2.png'];
         backgroundMap.loadData(block);
         backgroundMap.collisionData = col_block;
 
 
         var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
         var Gil_firstposition = [64,140]//プレイヤーの初期スポーン位置
-        //goalflagの設定
-        var goalflag = new Sprite(32,32);
-        goalflag.image = game.assets["../img/character/Gilbert2.png"];
-        goalflag.x = 200;
-        goalflag.y =240;
-        
-        Gilbert.image = game.assets["../img/character/Gilbert2.png"];
+        Gilbert.image = game.assets["img/character/Gilbert2.png"];
         Gilbert.x = Gil_firstposition[0];
         Gilbert.y = Gil_firstposition[1];
         Gilbert.prey = Gil_firstposition[1];
@@ -223,21 +217,14 @@ addEventListener( 'load', function() {
                 Gilbert.jumpFlg = true;
                 Gilbert.jumpPower = 0;
             }
-            //ゴール処理
-            if(Gilbert.x >= goalflag.x && Gilbert.x < goalflag.x+3){
-    
-                alert("gameclear");
-
-            }
         });
+
 
         var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
         stage.addChild(backgroundMap);
         stage.addChild(Gilbert);
 
         //プレイヤーのX座標に合わせて画面をスクロール
-        stage.addChild(goalflag);
-    
         stage.addEventListener(Event.ENTER_FRAME, function(e) {
         if(stage.x > 128 - Gilbert.x){
             stage.x = 128 - Gilbert.x;
@@ -250,7 +237,7 @@ addEventListener( 'load', function() {
 
         scene.addChild(stage);
 
-        scene.backgroundColor = 'black';	//シーンを黒く塗りつぶす
+        //scene.backgroundColor = 'black';	//シーンを黒く塗りつぶす
 
 
 		return scene;

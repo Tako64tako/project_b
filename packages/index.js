@@ -8,9 +8,9 @@ addEventListener( 'load', function() {
 	game = new Core(320,320);	//ゲームオブジェクトの作成
     // フレームレートの設定。15fpsに設定
     game.fps = 15;//ゲーム画面のフレームレート　毎秒１５枚のアニメーションで構成
-    game.preload( 'img/character/Gilbert2.png' );	//画像をプリロード
-    game.preload('img/map/map1.png');
-    game.preload('img/map/map2.png');
+    game.preload( '../img/character/Gilbert2.png' );	//画像をプリロード
+    game.preload('../img/map/map1.png');
+    game.preload('../img/map/map2.png');
 
 
     //マップとの接触判定　いらない
@@ -118,14 +118,14 @@ addEventListener( 'load', function() {
 
 
         backgroundMap = new Map(16, 16);//マップ配置用のクラス
-        backgroundMap.image = game.assets['img/map/map2.png'];
+        backgroundMap.image = game.assets['../img/map/map2.png'];
         backgroundMap.loadData(block);
         backgroundMap.collisionData = col_block;
 
 
         var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
         var Gil_firstposition = [64,140]//プレイヤーの初期スポーン位置
-        Gilbert.image = game.assets["img/character/Gilbert2.png"];
+        Gilbert.image = game.assets["../img/character/Gilbert2.png"];
         Gilbert.x = Gil_firstposition[0];
         Gilbert.y = Gil_firstposition[1];
         Gilbert.prey = Gil_firstposition[1];

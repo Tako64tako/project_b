@@ -1,3 +1,5 @@
+# my-project
+
 ## Project setup
 ```
 yarn install
@@ -19,5 +21,4 @@ yarn lint
 ```
 
 ### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).# project_b
-
+See [Configuration Reference](https://cli.vuejs.org/config/).

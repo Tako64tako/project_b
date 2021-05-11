@@ -1,21 +1,23 @@
 ## Project setup
 ```
-yarn install
+npmがinstallされてなければしてください
 ```
 
-### Compiles and hot-reloads for development
+### vue-cli install
 ```
-yarn serve
+npm install -g vue-cli
+```
+### setup-guide
+```
+cd my-project
 ```
 
-### Compiles and minifies for production
 ```
-yarn build
+npm run dev
 ```
 
-### Lints and fixes files
 ```
-yarn lint
+http://localhost:8080へアクセス
 ```
 
 ### Customize configuration

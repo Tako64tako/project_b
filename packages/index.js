@@ -12,6 +12,8 @@ addEventListener( 'load', function() {
     game.preload('../img/map/map1.png');
     game.preload('../img/map/map2.png');
     game.preload('../img/bullet/icon0.png');
+    game.preload('../img/character/enemy1.png');
+    game.preload('../img/character/enemy2.png');
     game.keybind( 'Z'.charCodeAt(0), 'a' );     //Zキー入力をaボタンとする
 
 
@@ -297,6 +299,61 @@ addEventListener( 'load', function() {
 
 
         });
+        
+        //敵キャラ１初期設定
+        var enemy1x = 320;
+        var enemy1y = 245;
+        var enemydx = 3;
+        var enemy1min = enemy1x - 50;
+        var enemy1max = enemy1x + 50;
+        
+        var Enemy1 = Class.create( Sprite, {
+            initialize: function() {
+                Sprite.call(this, 20, 30);			
+                this.image = game.assets["../img/character/enemy1.png"];
+                this.moveTo(enemy1x, enemy1y);
+                this.frame = 1;
+            },
+            onenterframe: function() {
+                this.x += enemydx;
+                this.frame = (this.age%15) + 1;
+                if(this.x >= enemy1max || this.x <= enemy1min){
+                    enemydx = -enemydx;
+                }
+            }
+        });
+        
+        enemy1 = new Enemy1();
+        
+        stage.addChild(enemy1);
+        
+        //敵キャラ２初期設定
+        var enemy2x = 500;
+        var enemy2y = 145;
+        var enemydy = 3;
+        var enemy2min = enemy2y - 50;
+        var enemy2max = enemy2y + 50;
+        
+        var Enemy2 = Class.create( Sprite, {
+            initialize: function() {
+                Sprite.call(this, 20, 30);			
+                this.image = game.assets["../img/character/enemy2.png"];
+                this.moveTo(enemy2x, enemy2y);
+                this.frame = 1;
+            },
+            onenterframe: function() {
+                this.y += enemydy;
+                this.frame = (this.age%15) + 1;
+                if(this.y >= enemy2max || this.y <= enemy2min){
+                    enemydy = -enemydy;
+                }
+            }
+        });
+        
+        enemy2 = new Enemy2();
+        
+        stage.addChild(enemy2);
+        
 
         scene.addChild(stage);
 

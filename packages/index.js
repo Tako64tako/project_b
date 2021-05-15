@@ -5,23 +5,35 @@ var game;
 
 //Webページが読み込まれたら
 addEventListener( 'load', function() {
-	game = new Game(320,320);	//ゲームオブジェクトの作成
-  // フレームレートの設定。15fpsに設定
-  game.fps = 15;//ゲーム画面のフレームレート　毎秒１５枚のアニメーションで構成
-  game.preload( '../img/character/Gilbert2.png' );	//画像をプリロード
-  game.preload('../img/map/map1.png');
-  game.preload('../img/map/map2.png');
-  game.preload('../img/bullet/icon0.png');
-	//game.preload('../bgm/bgm1.mp3')
-  game.keybind( 'Z'.charCodeAt(0), 'a' );     //Zキー入力をaボタンとする
+	game = new Core(320,320);	//ゲームオブジェクトの作成
+    // フレームレートの設定。15fpsに設定
+    game.fps = 15;//ゲーム画面のフレームレート　毎秒１５枚のアニメーションで構成
+    game.preload( '../img/character/Gilbert2.png' );	//画像をプリロード
+    game.preload('../img/map/map1.png');
+    game.preload('../img/map/map2.png');
+    game.preload('../img/bullet/icon0.png');
+    game.preload('../img/character/enemy1.png');
+    game.preload('../img/character/enemy2.png');
+    game.keybind( 'Z'.charCodeAt(0), 'a' );     //Zキー入力をaボタンとする
+  
+  
+    var bgmsound = Sound.load('../bgm/bgm1.mp3');
+         bgmsound.volume = 0.5;
+    var jumpsound = Sound.load('../bgm/jump.mp3');
+    var bulettsound = Sound.load('../bgm/laser.mp3');
 
 
-  var bgmsound = Sound.load('../bgm/bgm1.mp3');
-  bgmsound.volume = 0.5;
-  var jumpsound = Sound.load('../bgm/jump.mp3');
-  var bulettsound = Sound.load('../bgm/laser.mp3');
-
-
+    //マップとの接触判定　いらない
+    /*
+    function bottom_collisionCheck(mapName,splite){
+        if(mapName.hitTest(splite.x+32 ,splite.y + 16 )){
+            console.log("通れない："+ (splite.x + 32));
+            return true;
+        }else{
+            return false;
+        }
+    }
+    */
 
   game.onload = function(){
       //game.pushScene()
@@ -29,6 +41,7 @@ addEventListener( 'load', function() {
       //bgm.play();
   }
 
+  
   game.titleScene = function(){
     var scene = new Scene();
     scene.backgroundColor = 'black';
@@ -44,6 +57,7 @@ addEventListener( 'load', function() {
     };
     return scene;
   }
+
     //メインシーン
 	game.mainScene = function() {
 		var scene = new Scene();		//シーンを作成
@@ -293,11 +307,67 @@ addEventListener( 'load', function() {
             this.x += this.speed;	//弾の移動
             if(this.x > Gilbert.x + 200 || this.x < -20){       //弾の削除
 
-                this.remove();
+        };
+        
+        //敵キャラ１初期設定
+        var enemy1x = 320;
+        var enemy1y = 245;
+        var enemydx = 3;
+        var enemy1min = enemy1x - 50;
+        var enemy1max = enemy1x + 50;
+        
+        var Enemy1 = Class.create( Sprite, {
+            initialize: function() {
+                Sprite.call(this, 20, 30);			
+                this.image = game.assets["../img/character/enemy1.png"];
+                this.moveTo(enemy1x, enemy1y);
+                this.frame = 1;
+            },
+            onenterframe: function() {
+                this.x += enemydx;
+                this.frame = (this.age%15) + 1;
+                if(this.x >= enemy1max || this.x <= enemy1min){
+                    enemydx = -enemydx;
+                }
+            }
+        });
+        
+        enemy1 = new Enemy1();
+        
+        stage.addChild(enemy1);
+        
+        //敵キャラ２初期設定
+        var enemy2x = 500;
+        var enemy2y = 145;
+        var enemydy = 3;
+        var enemy2min = enemy2y - 50;
+        var enemy2max = enemy2y + 50;
+        
+        var Enemy2 = Class.create( Sprite, {
+            initialize: function() {
+                Sprite.call(this, 20, 30);			
+                this.image = game.assets["../img/character/enemy2.png"];
+                this.moveTo(enemy2x, enemy2y);
+                this.frame = 1;
+            },
+            onenterframe: function() {
+                this.y += enemydy;
+                this.frame = (this.age%15) + 1;
+                if(this.y >= enemy2max || this.y <= enemy2min){
+                    enemydy = -enemydy;
+                }
+            }
+        });
+        
+        enemy2 = new Enemy2();
+        
+        stage.addChild(enemy2);
+        
+                        this.remove();
 
             }
         }
-    } );
+    );
 
 
     var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
@@ -311,6 +381,7 @@ addEventListener( 'load', function() {
     }else if(stage.x < 46 - Gilbert.x){
         stage.x = 46 - Gilbert.x;
     }
+        
 
 
     });

@@ -1,21 +1,34 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="ja">
 <head>
-    <meta charset="utf-8">
-    <title>横スクロール型ゲーム</title>
-    <script src="../enchant.js-builds-master/build/enchant.js"></script>
-    <script src="index.js"></script>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
-    </style>
+	<meta charset="UTF-8">
+	<title>Snipe at Monsters</title>
+	<script src="../enchant.js-builds-master/build/enchant.js"></script>
+
+	<script src="index.js"></script>
+	<style>
+		h1{
+		  color: white;
+		  text-align: center;
+			top: auto;
+		  padding : 40px;
+		}
+		body {
+			background-color: #202b37;
+			padding: 0;
+			margin: 0;
+		}
+		#enchant-stage{
+			transform: scale(2.0);
+			top: 100px;
+			padding: 0px;
+		  margin: 0 auto;
+		}
+	</style>
 </head>
-
 <body>
-
+	<h1>ステージ１</h1>
+	<div id="enchant-stage">
+	</div>
 </body>
-
 </html>

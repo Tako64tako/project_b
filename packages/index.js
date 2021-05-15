@@ -15,8 +15,7 @@ addEventListener( 'load', function() {
     game.preload('../img/character/enemy1.png');
     game.preload('../img/character/enemy2.png');
     game.keybind( 'Z'.charCodeAt(0), 'a' );     //Zキー入力をaボタンとする
-  
-  
+
     var bgmsound = Sound.load('../bgm/bgm1.mp3');
          bgmsound.volume = 0.5;
     var jumpsound = Sound.load('../bgm/jump.mp3');
@@ -41,7 +40,6 @@ addEventListener( 'load', function() {
       //bgm.play();
   }
 
-  
   game.titleScene = function(){
     var scene = new Scene();
     scene.backgroundColor = 'black';
@@ -345,7 +343,7 @@ addEventListener( 'load', function() {
         
         var Enemy2 = Class.create( Sprite, {
             initialize: function() {
-                Sprite.call(this, 20, 30);			
+                Sprite.call(this, 20, 30);
                 this.image = game.assets["../img/character/enemy2.png"];
                 this.moveTo(enemy2x, enemy2y);
                 this.frame = 1;
@@ -378,10 +376,9 @@ addEventListener( 'load', function() {
     stage.addEventListener(Event.ENTER_FRAME, function(e) {
     if(stage.x > 128 - Gilbert.x){
         stage.x = 128 - Gilbert.x;
-    }else if(stage.x < 46 - Gilbert.x){
-        stage.x = 46 - Gilbert.x;
+    }else if(stage.x < 80 - Gilbert.x){
+        stage.x = 80 - Gilbert.x;
     }
-        
 
 
     });

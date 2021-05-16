@@ -146,6 +146,9 @@ addEventListener( 'load', function() {
     backgroundMap.image = game.assets['../img/map/map2.png'];
     backgroundMap.loadData(block);
     backgroundMap.collisionData = col_block;
+    var i = 0;
+    var bullet_pos_x = 0;       //弾の位置を他のオブジェクトの位置と比べる際に使用するx座標の値
+    var bullet_pos_y = 0;       //弾の位置を他のオブジェクトの位置と比べる際に使用するy座標の値
     var bullet_count = 0;       //弾の間隔を数える
     var bullet_flag = true;     //間隔が10フレームあいたかを判断
     var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
@@ -261,11 +264,11 @@ addEventListener( 'load', function() {
               hitABullet();
             }
         //前に弾を打った時から10フレームが経過かつ'zキーが押された時'
-            var bullet;
+            
             function hitABullet() {
               //弾を作成
-        	    bullet = new Bullet();
-                scene.addChild( bullet );
+        	    var bullet = new Bullet();
+                stage.addChild( bullet );
                 bullet_flag = false;
                 bullet_count = 0;
 
@@ -279,6 +282,14 @@ addEventListener( 'load', function() {
         }
 
         if(bullet_count==10)bullet_flag=true;       //フレームカウントが10になった時、弾を打てるようにする
+
+        if( i == 0){
+            var enemy1 = new Enemy1;
+            stage.addChild(enemy1);
+            var enemy2 = new Enemy2;
+            stage.addChild(enemy2);
+            i = 1;
+        }
 
     });
 
@@ -294,88 +305,90 @@ addEventListener( 'load', function() {
         //プレイヤーの向きによって弾の位置や動かす方向を変える
         if ( Gilbert.scaleX >= 0 ) {
 	        this.speed = 10;
-                bulletX = Gilbert.x + 25 + stage.x;
+                bulletX = Gilbert.x + 25 ;
                 Gilbert.frame = 59;
         } else {
 	        this.speed = -10;
-                bulletX = Gilbert.x - 9.25 + stage.x;
+                bulletX = Gilbert.x - 9.25 ;
                 Gilbert.frame = 59;
         }
         bulletY = Gilbert.y + 6;
+        bullet_pos_y = bulletY;
 
         this.moveTo( bulletX, bulletY );	//弾の位置
       },
       onenterframe: function() {
             this.x += this.speed;	//弾の移動
+            bullet_pos_x = this.x;
             if(this.x > Gilbert.x + 200 || this.x < -20){       //弾の削除
+                this.remove();
+            };
+        }
+    });
 
-        };
-        
-        //敵キャラ１初期設定
-        var enemy1x = 320;
-        var enemy1y = 245;
-        var enemydx = 3;
-        var enemy1min = enemy1x - 50;
-        var enemy1max = enemy1x + 50;
-        
-        var Enemy1 = Class.create( Sprite, {
-            initialize: function() {
-                Sprite.call(this, 20, 30);			
-                this.image = game.assets["../img/character/enemy1.png"];
-                this.moveTo(enemy1x, enemy1y);
-                this.frame = 1;
-            },
-            onenterframe: function() {
-                this.x += enemydx;
-                this.frame = (this.age%15) + 1;
-                if(this.x >= enemy1max || this.x <= enemy1min){
-                    enemydx = -enemydx;
-                }
+    //敵キャラ１初期設定
+    var enemy1x = 320;
+    var enemy1y = 245;
+    var enemydx = 3;
+    var enemy1min = enemy1x - 50;
+    var enemy1max = enemy1x + 50;
+    
+    var Enemy1 = Class.create( Sprite, {
+        initialize: function() {
+            Sprite.call(this, 20, 30);			
+            this.image = game.assets["../img/character/enemy1.png"];
+            this.moveTo(enemy1x, enemy1y);
+            this.frame = 1;
+        },
+        onenterframe: function() {
+            this.x += enemydx;
+            this.frame = (this.age%15) + 1;
+            if(this.x >= enemy1max || this.x <= enemy1min){
+                enemydx = -enemydx;
             }
-        });
-        
-        enemy1 = new Enemy1();
-        
-        stage.addChild(enemy1);
-        
-        //敵キャラ２初期設定
-        var enemy2x = 500;
-        var enemy2y = 145;
-        var enemydy = 3;
-        var enemy2min = enemy2y - 50;
-        var enemy2max = enemy2y + 50;
-        
-        var Enemy2 = Class.create( Sprite, {
-            initialize: function() {
-                Sprite.call(this, 20, 30);
-                this.image = game.assets["../img/character/enemy2.png"];
-                this.moveTo(enemy2x, enemy2y);
-                this.frame = 1;
-            },
-            onenterframe: function() {
-                this.y += enemydy;
-                this.frame = (this.age%15) + 1;
-                if(this.y >= enemy2max || this.y <= enemy2min){
-                    enemydy = -enemydy;
+            //弾との当たり判定
+            if( bullet_pos_x - this.x > -7 && bullet_pos_x - this.x < 7){
+                if(bullet_pos_y - this.y > -6 && bullet_pos_y - this.y < 6){
+                    this.remove();
                 }
-            }
-        });
-        
-        enemy2 = new Enemy2();
-        
-        stage.addChild(enemy2);
-        
-                        this.remove();
-
             }
         }
-    );
+    });
 
-
+    
+    //敵キャラ２初期設定
+    var enemy2x = 500;
+    var enemy2y = 175;
+    var enemydy = 3;
+    var enemy2min = enemy2y - 50;
+    var enemy2max = enemy2y + 50;
+    
+    var Enemy2 = Class.create( Sprite, {
+        initialize: function() {
+            Sprite.call(this, 20, 30);
+            this.image = game.assets["../img/character/enemy2.png"];
+            this.moveTo(enemy2x, enemy2y);
+            this.frame = 1;
+        },
+        onenterframe: function() {
+            this.y += enemydy;
+            this.frame = (this.age%15) + 1;
+            if(this.y >= enemy2max || this.y <= enemy2min){
+                enemydy = -enemydy;
+            }
+            //弾との当たり判定
+            if( bullet_pos_x - this.x > -7 && bullet_pos_x - this.x < 7){
+                if(bullet_pos_y - this.y > -15 && bullet_pos_y - this.y < 15){
+                    this.remove();
+                }
+            }
+        }
+    });
+    
+    
     var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
     stage.addChild(backgroundMap);
     stage.addChild(Gilbert);
-
     //プレイヤーのX座標に合わせて画面をスクロール
     stage.addEventListener(Event.ENTER_FRAME, function(e) {
     if(stage.x > 128 - Gilbert.x){

@@ -12,6 +12,7 @@ addEventListener( 'load', function() {
     game.preload('../img/map/map1.png');
     game.preload('../img/map/map2.png');
     game.preload('../img/bullet/icon0.png');
+    game.preload('../img/flag/flag_red_transparent.png')
     game.preload('../img/character/enemy1.png');
     game.preload('../img/character/enemy2.png');
     game.keybind( 'Z'.charCodeAt(0), 'a' );     //Zキー入力をaボタンとする
@@ -151,6 +152,16 @@ addEventListener( 'load', function() {
     var bullet_pos_y = 0;       //弾の位置を他のオブジェクトの位置と比べる際に使用するy座標の値
     var bullet_count = 0;       //弾の間隔を数える
     var bullet_flag = true;     //間隔が10フレームあいたかを判断
+
+    var goal_flag = false;      //ゴールしたかどうかを判定する
+    var goal = new Sprite(32,32);       //ゴールイラスト
+    var goal_pos = [600,240];       //ゴールの位置
+    goal.image = game.assets["../img/flag/flag_red_transparent.png"];
+    goal.x = goal_pos[0];
+    goal.y = goal_pos[1];
+    var goal_framecount = 0;
+    var framecount_set = 0;
+
     var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
     var Gil_firstposition = [64,240]//プレイヤーの初期スポーン位置
     Gilbert.image = game.assets["../img/character/Gilbert2.png"];
@@ -165,46 +176,51 @@ addEventListener( 'load', function() {
     Gilbert.addEventListener(Event.ENTER_FRAME, function(e) {
 				//bgm.loop();
         bgmsound.play();
-        if (game.input.up && Gilbert.jumpingFlg === false) {
+        if (game.input.up && Gilbert.jumpingFlg === false && goal_flag == false) {
            Gilbert.jumpFlg = true;
            jumpsound.play();
         }
 
-        if (game.input.right) {
-             //→キー
-            if(backgroundMap.hitTest(Gilbert.x+30 ,Gilbert.y + 30 )){
-            }else{
-                if(Gilbert.jumpingFlg){
-                    Gilbert.x += 4;
-                    Gilbert.scaleX = 1;
+        if(goal_flag == false){
+            if (game.input.right) {
+                 //→キー
+                if(backgroundMap.hitTest(Gilbert.x+30 ,Gilbert.y + 30 )){
                 }else{
-                    Gilbert.frame = (Gilbert.age%5) + 1;
-                    Gilbert.x += 4;
-                    Gilbert.scaleX = 1;
-                }
+                    if(Gilbert.jumpingFlg){
+                        Gilbert.x += 4;
+                        Gilbert.scaleX = 1;
+                    }else{
+                        Gilbert.frame = (Gilbert.age%5) + 1;
+                        Gilbert.x += 4;
+                        Gilbert.scaleX = 1;
+                    }
 
-            }
-        }
-        if (game.input.left) {
-            //←キー
-            if(backgroundMap.hitTest(Gilbert.x+5 ,Gilbert.y + 30 )){
-            }else{
-                if(Gilbert.jumpingFlg){
-                    Gilbert.x -= 4;
-                    Gilbert.scaleX = -1;
-                }else{
-                    Gilbert.frame = (Gilbert.age%5) + 1;
-                    Gilbert.x -= 4;
-                    Gilbert.scaleX = -1;
                 }
             }
-        }
+        
 
+            if (game.input.left) {
+                //←キー
+                if(backgroundMap.hitTest(Gilbert.x+5 ,Gilbert.y + 30 )){
+                }else{
+                    if(Gilbert.jumpingFlg){
+                        Gilbert.x -= 4;
+                        Gilbert.scaleX = -1;
+                    }else{
+                        Gilbert.frame = (Gilbert.age%5) + 1;
+                        Gilbert.x -= 4;
+                        Gilbert.scaleX = -1;
+                    }
+                }
+                
+            }
+        }
         //左に落ちないようにする処理
             if(Gilbert.x == 0){
                 Gilbert.x += 4;
                 Gilbert.scaleX = -1;
             }
+        
         //=============
         //ジャンプ処理
         //=============
@@ -257,7 +273,7 @@ addEventListener( 'load', function() {
         //10フレーム間隔で発射できる
         //===========================================
 
-        if(bullet_flag==true){
+        if(bullet_flag==true && goal_flag == false){
 
             if ( game.input.a ) {
               bulettsound.play();
@@ -289,6 +305,31 @@ addEventListener( 'load', function() {
             var enemy2 = new Enemy2;
             stage.addChild(enemy2);
             i = 1;
+        }
+
+
+        //===========================================
+        //ゴール処理
+        //===========================================
+
+        if(Gilbert.x >= goal.x){
+            goal_flag = true;
+            framecount_set ++
+            if(framecount_set % 3 == 0 ){
+
+                goal_framecount ++ 
+                Gilbert.frame = goal_framecount % 2 +  53;
+                Gilbert.x = Gilbert.x;
+
+            }
+            if(framecount_set == 90){
+                alert("Game Clear");
+            }
+        }
+        else{
+
+            goal_flag = false;
+
         }
 
     });
@@ -325,6 +366,7 @@ addEventListener( 'load', function() {
             };
         }
     });
+
 
     //敵キャラ１初期設定
     var enemy1x = 320;
@@ -388,7 +430,9 @@ addEventListener( 'load', function() {
     
     var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
     stage.addChild(backgroundMap);
+    stage.addChild(goal);
     stage.addChild(Gilbert);
+    
     //プレイヤーのX座標に合わせて画面をスクロール
     stage.addEventListener(Event.ENTER_FRAME, function(e) {
     if(stage.x > 128 - Gilbert.x){

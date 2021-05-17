@@ -5,10 +5,10 @@ var game;
 
 //Webページが読み込まれたら
 addEventListener( 'load', function() {
-	game = new Core(320,320);	//ゲームオブジェクトの作成
+    game = new Core(320,320);   //ゲームオブジェクトの作成
     // フレームレートの設定。15fpsに設定
     game.fps = 15;//ゲーム画面のフレームレート　毎秒１５枚のアニメーションで構成
-    game.preload( '../img/character/Gilbert2.png' );	//画像をプリロード
+    game.preload( '../img/character/Gilbert2.png' );    //画像をプリロード
     game.preload('../img/map/map1.png');
     game.preload('../img/map/map2.png');
     game.preload('../img/bullet/icon0.png');
@@ -37,7 +37,7 @@ addEventListener( 'load', function() {
 
   game.onload = function(){
       //game.pushScene()
-      game.pushScene( game.titleScene() );		//シーンをゲームに追加する
+      game.pushScene( game.titleScene() );      //シーンをゲームに追加する
       //bgm.play();
   }
 
@@ -45,11 +45,11 @@ addEventListener( 'load', function() {
     var scene = new Scene();
     scene.backgroundColor = 'black';
     score = new Label();
-  	score.color = 'white';
-  	score.font = "normal normal 30px/1.0 monospace";
-  	score.text = "Tap to start!";
+    score.color = 'white';
+    score.font = "normal normal 30px/1.0 monospace";
+    score.text = "Tap to start!";
     score.moveTo(70,150);
-	  scene.addChild(score);
+      scene.addChild(score);
     scene.ontouchstart = function(){
       //console.log("startTime = " + startTime);    // コンソールに表示
       game.replaceScene(game.mainScene() );
@@ -58,9 +58,9 @@ addEventListener( 'load', function() {
   }
 
     //メインシーン
-	game.mainScene = function() {
-		var scene = new Scene();		//シーンを作成
-		//scene.backgroundColor = '#00BFFF';	//ブロックおいてないとこの色（前まで白色だったとこ）
+    game.mainScene = function() {
+        var scene = new Scene();        //シーンを作成
+        //scene.backgroundColor = '#00BFFF';    //ブロックおいてないとこの色（前まで白色だったとこ）
     scene.backgroundColor = 'skyblue';
 
     //========================
@@ -174,7 +174,7 @@ addEventListener( 'load', function() {
     Gilbert.jumpingFlg = false;//ジャンプ中がどうかのフラグ
     Gilbert.jumpPower = 8; //プレイヤーのジャンプ力　大きくするほど高く飛べる
     Gilbert.addEventListener(Event.ENTER_FRAME, function(e) {
-				//bgm.loop();
+                //bgm.loop();
         bgmsound.play();
         if (game.input.up && Gilbert.jumpingFlg === false && goal_flag == false) {
            Gilbert.jumpFlg = true;
@@ -283,7 +283,7 @@ addEventListener( 'load', function() {
             
             function hitABullet() {
               //弾を作成
-        	    var bullet = new Bullet();
+                var bullet = new Bullet();
                 stage.addChild( bullet );
                 bullet_flag = false;
                 bullet_count = 0;
@@ -338,28 +338,28 @@ addEventListener( 'load', function() {
     var Bullet = Class.create( Sprite, {
       initialize: function() {
 
-        var bulletX, bulletY;	//弾のX座標とY座標
-        Sprite.call( this, 16, 16 );	//Spriteクラスのメソッドを、thisでも使えるようにする
-            this.image = game.assets[ '../img/bullet/icon0.png' ];	//スプライトの画像ファイルを指定
+        var bulletX, bulletY;   //弾のX座標とY座標
+        Sprite.call( this, 16, 16 );    //Spriteクラスのメソッドを、thisでも使えるようにする
+            this.image = game.assets[ '../img/bullet/icon0.png' ];  //スプライトの画像ファイルを指定
             this.frame = 50
 
         //プレイヤーの向きによって弾の位置や動かす方向を変える
         if ( Gilbert.scaleX >= 0 ) {
-	        this.speed = 10;
+            this.speed = 10;
                 bulletX = Gilbert.x + 25 ;
                 Gilbert.frame = 59;
         } else {
-	        this.speed = -10;
+            this.speed = -10;
                 bulletX = Gilbert.x - 9.25 ;
                 Gilbert.frame = 59;
         }
         bulletY = Gilbert.y + 6;
         bullet_pos_y = bulletY;
 
-        this.moveTo( bulletX, bulletY );	//弾の位置
+        this.moveTo( bulletX, bulletY );    //弾の位置
       },
       onenterframe: function() {
-            this.x += this.speed;	//弾の移動
+            this.x += this.speed;   //弾の移動
             bullet_pos_x = this.x;
             if(this.x > Gilbert.x + 200 || this.x < -20){       //弾の削除
                 this.remove();
@@ -377,7 +377,7 @@ addEventListener( 'load', function() {
     
     var Enemy1 = Class.create( Sprite, {
         initialize: function() {
-            Sprite.call(this, 20, 30);			
+            Sprite.call(this, 20, 30);          
             this.image = game.assets["../img/character/enemy1.png"];
             this.moveTo(enemy1x, enemy1y);
             this.frame = 1;
@@ -447,9 +447,10 @@ addEventListener( 'load', function() {
     scene.addChild(stage);
 
     return scene;
-	}
+    }
 
 
-  game.start();	//ゲームスタート
+  game.start(); //ゲームスタート
 
 });
+

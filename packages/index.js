@@ -16,6 +16,7 @@ addEventListener( 'load', function() {
     game.preload('../img/character/enemy1.png');
     game.preload('../img/character/enemy2.png');
     game.keybind( 'Z'.charCodeAt(0), 'a' );     //Zキー入力をaボタンとする
+		game.keybind( 'Q'.charCodeAt(0), 'b' );     //Qキー入力をbボタンとする
 
     var bgmsound = Sound.load('../bgm/bgm1.mp3');
          bgmsound.volume = 0.5;
@@ -39,6 +40,34 @@ addEventListener( 'load', function() {
       //game.pushScene()
       game.pushScene( game.titleScene() );      //シーンをゲームに追加する
       //bgm.play();
+  }
+
+
+	//ポーズ（一時停止）シーン
+  game.pauseScene = function(){
+    var scene = new Scene();
+    scene.backgroundColor = 'rgba(0,0,0,0.5)';
+    msg1 = new Label();
+  	msg1.color = 'white';
+  	msg1.font = "normal normal 30px/1.0 monospace";
+  	msg1.text = "Pause!";
+    msg1.moveTo(180,150);
+	  scene.addChild(msg1);
+		msg2 = new Label();
+  	msg2.color = 'white';
+  	msg2.font = "normal normal 30px/1.0 monospace";
+  	msg2.text = "Tap 'Z' to Restart!";
+    msg2.moveTo(120,250);
+	  scene.addChild(msg2);
+    //console.log("pause!");
+    scene.addEventListener(Event.ENTER_FRAME, function(e) {
+      if ( game.input.a ) {
+        bulettsound.play();
+        bgmsound.pause();
+        game.popScene();
+      }
+    });
+    return scene;
   }
 
 	game.titleScene = function(){
@@ -250,6 +279,15 @@ addEventListener( 'load', function() {
     Gilbert.addEventListener(Event.ENTER_FRAME, function(e) {
                 //bgm.loop();
         bgmsound.play();
+
+				//----------------------------
+	      //Qキーで一ゲームを一時停止
+	      //----------------------------
+	      if ( game.input.b ) {
+	        bulettsound.play();
+	        bgmsound.pause();
+	        game.pushScene(game.pauseScene());
+	      }
         if (game.input.up && Gilbert.jumpingFlg === false && goal_flag == false) {
            Gilbert.jumpFlg = true;
            jumpsound.play();

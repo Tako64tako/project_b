@@ -508,10 +508,6 @@ addEventListener( 'load', function() {
 
     //var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
 
-    //var enemy2 = new Enemy2();
-
-    //stage.addChild(enemy2);
-		//stage.addChild(enemy1);
 
     stage.addChild(backgroundMap);
     stage.addChild(goal);

@@ -213,6 +213,12 @@ addEventListener( 'load', function() {
     var bullet_pos_x = 0;       //弾の位置を他のオブジェクトの位置と比べる際に使用するx座標の値
     var bullet_pos_y = 0;       //弾の位置を他のオブジェクトの位置と比べる際に使用するy座標の値
 
+    //無敵管理
+    var invincible_flag = false;    //無敵かどうかのフラグ　true = 無敵
+    var invincible_count = 0;   //無敵時間のカウント（フレーム数） 
+
+    var goal_flag = false;      //ゴールしたかどうかを判定する
+
     //残機と制限時間、スコアのラベル
     var livesLabel = new Label();
     livesLabel.font = "16px 'Russo One', sans-serif";
@@ -227,12 +233,15 @@ addEventListener( 'load', function() {
     timesLabel.x = 350;
     timesLabel.y = 5;
     timesLabel.addEventListener('enterframe', function(){
-        if(game.frame % game.fps == 0){
-            game.time--;
-            timesLabel.text = '制限時間：' + game.time;
-            if (game.time == 0) game.replaceScene(game.gameOverScene());
+        if(goal_flag == false){
+            if(game.frame % game.fps == 0){
+                game.time--;
+                timesLabel.text = '制限時間：' + game.time;
+                if (game.time == 0) game.replaceScene(game.gameOverScene());
+            }
         }
     });
+    
     scene.addChild(timesLabel);
 
     //残機とスコア用処理
@@ -252,10 +261,10 @@ addEventListener( 'load', function() {
         scene.addChild(scoresLabel);
     }
 
+    var bullet;
     var bullet_count = 0;       //弾の間隔を数える
     var bullet_flag = true;     //間隔が10フレームあいたかを判断
 
-    var goal_flag = false;      //ゴールしたかどうかを判定する
     var goal = new Sprite(32,32);       //ゴールイラスト
     var goal_pos = [600,400];       //ゴールの位置
     goal.image = game.assets["../img/flag/flag_red_transparent.png"];
@@ -395,7 +404,7 @@ addEventListener( 'load', function() {
 
             function hitABullet() {
               //弾を作成
-                var bullet = new Bullet();
+                bullet = new Bullet();
                 stage.addChild( bullet );
                 bullet_flag = false;
                 bullet_count = 0;
@@ -429,10 +438,14 @@ addEventListener( 'load', function() {
             framecount_set ++
             if(framecount_set % 3 == 0 ){
 
-                goal_framecount ++
-                Gilbert.frame = goal_framecount % 2 +  53;
-                Gilbert.x = Gilbert.x;
+                goal_framecount ++ //ゴールしてからの時間を計測
+                game.time = game.time; //ゲーム内の時間をクリアした時間で固定
+                Gilbert.x = Gilbert.x; //Gilbertのx軸を固定
+                if(Gilbert.jumpFlg == false){ //ジャンプが終わった後にフレームを動かす
 
+                    Gilbert.frame = goal_framecount % 2 +  53;
+
+                }
             }
             if(framecount_set == 90){
                 alert("Game Clear");
@@ -455,17 +468,19 @@ addEventListener( 'load', function() {
         var bulletX, bulletY;   //弾のX座標とY座標
         Sprite.call( this, 16, 16 );    //Spriteクラスのメソッドを、thisでも使えるようにする
             this.image = game.assets[ '../img/bullet/icon0.png' ];  //スプライトの画像ファイルを指定
-            this.frame = 50
+            
 
         //プレイヤーの向きによって弾の位置や動かす方向を変える
         if ( Gilbert.scaleX >= 0 ) {
             this.speed = 10;
                 bulletX = Gilbert.x + 25 ;
                 Gilbert.frame = 59;
+                this.frame = 54
         } else {
             this.speed = -10;
                 bulletX = Gilbert.x - 9.25 ;
                 Gilbert.frame = 59;
+                this.frame = 50
         }
         bulletY = Gilbert.y + 6;
         bullet_pos_y = bulletY;
@@ -478,6 +493,9 @@ addEventListener( 'load', function() {
             if(this.x > Gilbert.x + 200 || this.x < -20){       //弾の削除
                 this.remove();
             };
+            if(backgroundMap.hitTest(bullet.x + 9 ,bullet.y + 10)){
+                this.remove();
+            }
         }
     });
 
@@ -498,9 +516,29 @@ addEventListener( 'load', function() {
                 enemydx = -enemydx;
             }
             //弾との当たり判定
-            if( bullet_pos_x - this.x > -7 && bullet_pos_x - this.x < 7){
-                if(bullet_pos_y - this.y > -6 && bullet_pos_y - this.y < 6){
+            if( bullet_pos_x - this.x > -10 && bullet_pos_x - this.x < 10){
+                if(bullet_pos_y - this.y > -15 && bullet_pos_y - this.y < 15){
                     this.remove();
+                    bullet.remove();
+                }
+            }
+            //無敵時間管理
+            if(invincible_flag == true){ //無敵フラグがtrueなら
+                invincible_count ++ //無敵時間をカウント
+            }
+            if(invincible_count == 45){ //無敵時間が3秒になったら
+                invincible_flag = false; //無敵を解除
+                invincible_count = 0; //無敵時間を初期化
+                Gilbert.opacity = 1; //Gilbertの透明度を1にする
+            }
+            //Gilbertとの当たり判定
+            if(invincible_flag == false){
+                if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){
+                    if(Gilbert.y - this.y > -21 && Gilbert.y - this.y < 21){
+                        Gilbert.lives -= 1; //Gilbertの残機を1減らす
+                        invincible_flag = true; //無敵フラグをtrueに
+                        Gilbert.opacity = 0.7; //Gilbertの透明度を0.7にする
+                    }
                 }
             }
         }
@@ -530,9 +568,29 @@ addEventListener( 'load', function() {
                 enemydy = -enemydy;
             }
             //弾との当たり判定
-            if( bullet_pos_x - this.x > -7 && bullet_pos_x - this.x < 7){
-                if(bullet_pos_y - this.y > -15 && bullet_pos_y - this.y < 15){
+            if( bullet_pos_x - this.x > -10 && bullet_pos_x - this.x < 10){
+                if(bullet_pos_y - this.y > -20 && bullet_pos_y - this.y < 20){
                     this.remove();
+                    bullet.remove();
+                }
+            }
+            //無敵時間管理
+            if(invincible_flag == true){ //無敵フラグがtrueなら
+                invincible_count ++ //無敵時間をカウント
+            }
+            if(invincible_count == 45){ //無敵時間が3秒になったら
+                invincible_flag = false; //無敵を解除
+                invincible_count = 0; //無敵時間を初期化
+                Gilbert.opacity = 1; //Gilbertの透明度を1にする
+            }
+            //Gilbertとの当たり判定
+            if(invincible_flag == false){
+                if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){
+                    if(Gilbert.y - this.y > -21 && Gilbert.y - this.y < 21){
+                        Gilbert.lives -= 1; //Gilbertの残機を1減らす
+                        invincible_flag = true; //無敵フラグをtrueに
+                        Gilbert.opacity = 0.7; //Gilbertの透明度を0.7にする
+                    }
                 }
             }
         }

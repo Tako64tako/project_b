@@ -75,17 +75,17 @@ addEventListener( 'load', function() {
     };
     return scene;
   }
-  
+
   //ゲームオーバー、デバッグ用なので変えてもいいし消しても大丈夫
   game.gameOverScene = function() {
         var scene = new Scene();
         scene.backgroundColor = 'black';
-        var gameOverLabel = new Label( 'GAME OVER' );		
-        gameOverLabel.color = 'white';							
-        gameOverLabel.font = "32px 'Russo One', sans-serif";	
-        gameOverLabel.moveTo( 65, 150 );						
-        scene.addChild( gameOverLabel );				
- 
+        var gameOverLabel = new Label( 'GAME OVER' );
+        gameOverLabel.color = 'white';
+        gameOverLabel.font = "32px 'Russo One', sans-serif";
+        gameOverLabel.moveTo( 65, 150 );
+        scene.addChild( gameOverLabel );
+
         return scene;
     }
 
@@ -199,7 +199,7 @@ addEventListener( 'load', function() {
     backgroundMap.image = game.assets['../img/map/map2.png'];
     backgroundMap.loadData(block);
     backgroundMap.collisionData = col_block;
-        
+
     //残機と制限時間、スコアのラベル
     var livesLabel = new Label();
     livesLabel.font = "16px 'Russo One', sans-serif";
@@ -207,7 +207,7 @@ addEventListener( 'load', function() {
     timesLabel.font = "16px 'Russo One', sans-serif";
     var scoresLabel = new Label();
     scoresLabel.font = "16px 'Russo One', sans-serif";
-        
+
     //制限時間表示
     game.time = 20;
     timesLabel.text = '制限時間：' + game.time;
@@ -221,7 +221,7 @@ addEventListener( 'load', function() {
         }
     });
     scene.addChild(timesLabel);
-        
+
     //残機とスコア用処理
     scene.onenterframe = function() {
         //残機表示
@@ -230,7 +230,7 @@ addEventListener( 'load', function() {
         livesLabel.y = 5;
         scene.addChild(livesLabel);
         if (Gilbert.lives === 0) game.replaceScene(game.gameOverScene());
-            
+
         //スコア表示
         //スコアに関してはどのようにするのか決めてないから後で追加します
         var scores = 0;
@@ -238,7 +238,7 @@ addEventListener( 'load', function() {
         scoresLabel.y = 25;
         scene.addChild(scoresLabel);
     }
-        
+
     var bullet_count = 0;       //弾の間隔を数える
     var bullet_flag = true;     //間隔が10フレームあいたかを判断
     var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
@@ -383,6 +383,8 @@ addEventListener( 'load', function() {
           game.pushScene(game.pauseScene());
         }
     });
+		var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
+
 
     /**弾のクラス**/
     var Bullet = Class.create( Sprite, {
@@ -471,9 +473,8 @@ addEventListener( 'load', function() {
 
     enemy2 = new Enemy2();
 
-    stage.addChild(enemy2);    
+    stage.addChild(enemy2);
 
-    var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
     stage.addChild(backgroundMap);
     stage.addChild(Gilbert);
 

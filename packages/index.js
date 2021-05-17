@@ -222,7 +222,7 @@ addEventListener( 'load', function() {
     scoresLabel.font = "16px 'Russo One', sans-serif";
 
     //制限時間表示
-    game.time = 20;
+    game.time = 300;
     timesLabel.text = '制限時間：' + game.time;
     timesLabel.x = 350;
     timesLabel.y = 5;

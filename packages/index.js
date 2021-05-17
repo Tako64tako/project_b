@@ -246,6 +246,7 @@ addEventListener( 'load', function() {
     Gilbert.jumpFlg = false;//ジャンプしてるかどうかのフラグ
     Gilbert.jumpingFlg = false;//ジャンプ中がどうかのフラグ
     Gilbert.jumpPower = 8; //プレイヤーのジャンプ力　大きくするほど高く飛べる
+    Gilbert.lives = 5; // 残機数
     Gilbert.addEventListener(Event.ENTER_FRAME, function(e) {
                 //bgm.loop();
         bgmsound.play();

@@ -1,0 +1,19 @@
+body{
+    background-color: #202b37;
+}
+.stage{
+    display: inline-block;
+    width:45%;
+    height:45%;
+    margin:1%;
+}
+.stage:hover{
+    filter: opacity(70%);
+    cursor: pointer;
+}
+h1{
+    margin-top: auto;
+    text-align:center;
+    font-size:40px;
+    color:aliceblue;
+}

@@ -2,6 +2,7 @@ enchant();
 
 //変数宣言
 var game;
+var scores = 0;
 
 //Webページが読み込まれたら
 addEventListener( 'load', function() {
@@ -254,8 +255,6 @@ addEventListener( 'load', function() {
         if (Gilbert.lives === 0) game.replaceScene(game.gameOverScene());
 
         //スコア表示
-        //スコアに関してはどのようにするのか決めてないから後で追加します
-        var scores = 0;
         scoresLabel.text = 'SCORE : ' + scores;
         scoresLabel.y = 25;
         scene.addChild(scoresLabel);
@@ -440,6 +439,11 @@ addEventListener( 'load', function() {
 
                 goal_framecount ++ //ゴールしてからの時間を計測
                 game.time = game.time; //ゲーム内の時間をクリアした時間で固定
+                //スコア追加
+                if(framecount_set == 15){
+                    scores += game.time;
+                    scores += Gilbert.lives * 100;
+                }
                 Gilbert.x = Gilbert.x; //Gilbertのx軸を固定
                 if(Gilbert.jumpFlg == false){ //ジャンプが終わった後にフレームを動かす
 
@@ -457,7 +461,7 @@ addEventListener( 'load', function() {
 
         }
 
-    });
+    }); 
 		var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
 
 
@@ -520,6 +524,7 @@ addEventListener( 'load', function() {
                 if(bullet_pos_y - this.y > -15 && bullet_pos_y - this.y < 15){
                     this.remove();
                     bullet.remove();
+                    scores += 100;
                 }
             }
             //無敵時間管理
@@ -572,6 +577,7 @@ addEventListener( 'load', function() {
                 if(bullet_pos_y - this.y > -20 && bullet_pos_y - this.y < 20){
                     this.remove();
                     bullet.remove();
+                    scores += 200;
                 }
             }
             //無敵時間管理

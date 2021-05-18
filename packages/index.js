@@ -273,6 +273,9 @@ addEventListener( 'load', function() {
     var goal_framecount = 0;
     var framecount_set = 0;
 
+    var enemy1; //敵スプライトの変数宣言
+    var enemy2; //敵スプライトの変数宣言
+
     var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
     var Gil_firstposition = [64,240]//プレイヤーの初期スポーン位置
     Gilbert.image = game.assets["../img/character/Gilbert2.png"];
@@ -421,12 +424,35 @@ addEventListener( 'load', function() {
         if(bullet_count==10)bullet_flag=true;       //フレームカウントが10になった時、弾を打てるようにする
 
         if( i == 0){
-            var enemy1 = new Enemy1;
+            enemy1 = new Enemy1;
             stage.addChild(enemy1);
-            var enemy2 = new Enemy2;
+            enemy2 = new Enemy2;
             stage.addChild(enemy2);
             i = 1;
         }
+
+
+        //BulletクラスとEnemy1クラスとの当たり判定
+        Bullet.intersect(Enemy1).forEach(function(pair)
+{
+            //pair[0]: Bulletのインスタンス
+            //pair[1]: Enemy1のインスタンス
+            
+            pair[0].remove();
+            pair[1].remove();
+
+        });
+
+        //BulletクラスとEnemy2クラスとの当たり判定
+        Bullet.intersect(Enemy2).forEach(function(pair)
+{
+            //pair[0]: Bulletのインスタンス
+            //pair[1]: Enemy1のインスタンス
+            
+            pair[0].remove();
+            pair[1].remove();
+
+        });
 
 
         //===========================================
@@ -485,6 +511,7 @@ addEventListener( 'load', function() {
         bulletY = Gilbert.y + 6;
         bullet_pos_y = bulletY;
 
+
         this.moveTo( bulletX, bulletY );    //弾の位置
       },
       onenterframe: function() {
@@ -515,13 +542,7 @@ addEventListener( 'load', function() {
             if(this.x >= enemy1max || this.x <= enemy1min){
                 enemydx = -enemydx;
             }
-            //弾との当たり判定
-            if( bullet_pos_x - this.x > -10 && bullet_pos_x - this.x < 10){
-                if(bullet_pos_y - this.y > -15 && bullet_pos_y - this.y < 15){
-                    this.remove();
-                    bullet.remove();
-                }
-            }
+            
             //無敵時間管理
             if(invincible_flag == true){ //無敵フラグがtrueなら
                 invincible_count ++ //無敵時間をカウント
@@ -567,13 +588,7 @@ addEventListener( 'load', function() {
             if(this.y >= enemy2max || this.y <= enemy2min){
                 enemydy = -enemydy;
             }
-            //弾との当たり判定
-            if( bullet_pos_x - this.x > -10 && bullet_pos_x - this.x < 10){
-                if(bullet_pos_y - this.y > -20 && bullet_pos_y - this.y < 20){
-                    this.remove();
-                    bullet.remove();
-                }
-            }
+            
             //無敵時間管理
             if(invincible_flag == true){ //無敵フラグがtrueなら
                 invincible_count ++ //無敵時間をカウント

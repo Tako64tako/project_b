@@ -20,19 +20,8 @@ body{
     text-align:center;
     font-size:40px;
     color:aliceblue;
-    text-decoration: none;
-}
-
-.select a{
-    text-decoration: none;
-    vertical-align: middle;
-    border-radius: 50%;
-    transition: background 1s, border-width 0.5s cubic-bezier(0.075, 0.82, 0.165, 1), text-shadow 0.5s;
-    color: #daf6ff;
     text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
-    box-shadow: 0 0 0 rgba(10, 175, 230, 0), inset 0 0 0 rgba(10, 175, 230, 0);
-    background-image: radial-gradient(center, ellipse cover, rgba(10, 175, 230, 0) 0%, rgba(10, 175, 230, 0) 90%);
-    border: 0 dotted rgba(10, 175, 230, 0);
+    text-decoration: none;
 }
 
 .page{

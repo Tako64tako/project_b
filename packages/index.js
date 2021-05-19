@@ -2,6 +2,7 @@ enchant();
 
 //変数宣言
 var game;
+var scores = 0;
 
 //Webページが読み込まれたら
 addEventListener( 'load', function() {
@@ -160,9 +161,9 @@ addEventListener( 'load', function() {
       [ 8, 8, 8, 8, 8, 8, 8, 8,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
       [ 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
       [ 8, 8, 8, 8, 8, 8,32,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16],
-      [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16],
-      [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16]
+      [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16],
+      [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16],
+      [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16]
     ];
 
 
@@ -195,9 +196,9 @@ addEventListener( 'load', function() {
       [0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-      [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-      [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+      [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ];
     //========================
 
@@ -254,8 +255,6 @@ addEventListener( 'load', function() {
         if (Gilbert.lives === 0) game.replaceScene(game.gameOverScene());
 
         //スコア表示
-        //スコアに関してはどのようにするのか決めてないから後で追加します
-        var scores = 0;
         scoresLabel.text = 'SCORE : ' + scores;
         scoresLabel.y = 25;
         scene.addChild(scoresLabel);
@@ -272,6 +271,9 @@ addEventListener( 'load', function() {
     goal.y = goal_pos[1];
     var goal_framecount = 0;
     var framecount_set = 0;
+
+    var enemy1; //敵スプライトの変数宣言
+    var enemy2; //敵スプライトの変数宣言
 
     var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
     var Gil_firstposition = [64,240]//プレイヤーの初期スポーン位置
@@ -336,6 +338,12 @@ addEventListener( 'load', function() {
 
             }
         }
+        
+        //落とし穴処理
+        if(Gilbert.y > 480){
+            game.replaceScene(game.gameOverScene())
+        }
+        
         //左に落ちないようにする処理
             if(Gilbert.x == 0){
                 Gilbert.x += 4;
@@ -421,12 +429,35 @@ addEventListener( 'load', function() {
         if(bullet_count==10)bullet_flag=true;       //フレームカウントが10になった時、弾を打てるようにする
 
         if( i == 0){
-            var enemy1 = new Enemy1;
+            enemy1 = new Enemy1;
             stage.addChild(enemy1);
-            var enemy2 = new Enemy2;
+            enemy2 = new Enemy2;
             stage.addChild(enemy2);
             i = 1;
         }
+
+
+        //BulletクラスとEnemy1クラスとの当たり判定
+        Bullet.intersect(Enemy1).forEach(function(pair)
+{
+            //pair[0]: Bulletのインスタンス
+            //pair[1]: Enemy1のインスタンス
+            
+            pair[0].remove();
+            pair[1].remove();
+
+        });
+
+        //BulletクラスとEnemy2クラスとの当たり判定
+        Bullet.intersect(Enemy2).forEach(function(pair)
+{
+            //pair[0]: Bulletのインスタンス
+            //pair[1]: Enemy1のインスタンス
+            
+            pair[0].remove();
+            pair[1].remove();
+
+        });
 
 
         //===========================================
@@ -440,6 +471,11 @@ addEventListener( 'load', function() {
 
                 goal_framecount ++ //ゴールしてからの時間を計測
                 game.time = game.time; //ゲーム内の時間をクリアした時間で固定
+                //スコア追加
+                if(framecount_set == 15){
+                    scores += game.time;
+                    scores += Gilbert.lives * 100;
+                }
                 Gilbert.x = Gilbert.x; //Gilbertのx軸を固定
                 if(Gilbert.jumpFlg == false){ //ジャンプが終わった後にフレームを動かす
 
@@ -457,7 +493,7 @@ addEventListener( 'load', function() {
 
         }
 
-    });
+    }); 
 		var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
 
 
@@ -484,6 +520,7 @@ addEventListener( 'load', function() {
         }
         bulletY = Gilbert.y + 6;
         bullet_pos_y = bulletY;
+
 
         this.moveTo( bulletX, bulletY );    //弾の位置
       },
@@ -520,6 +557,7 @@ addEventListener( 'load', function() {
                 if(bullet_pos_y - this.y > -15 && bullet_pos_y - this.y < 15){
                     this.remove();
                     bullet.remove();
+                    scores += 100;
                 }
             }
             //無敵時間管理
@@ -572,6 +610,7 @@ addEventListener( 'load', function() {
                 if(bullet_pos_y - this.y > -20 && bullet_pos_y - this.y < 20){
                     this.remove();
                     bullet.remove();
+                    scores += 200;
                 }
             }
             //無敵時間管理

@@ -19,7 +19,7 @@ addEventListener( 'load', function() {
 		game.keybind( 'Q'.charCodeAt(0), 'b' );     //Qキー入力をbボタンとする
 
     var bgmsound = Sound.load('../bgm/bgm1.mp3');
-         bgmsound.volume = 0.5;
+        bgmsound.volume = 0.5;
     var jumpsound = Sound.load('../bgm/jump.mp3');
     var bulettsound = Sound.load('../bgm/laser.mp3');
 
@@ -36,18 +36,18 @@ addEventListener( 'load', function() {
     }
     */
 
-  game.onload = function(){
+    game.onload = function(){
       //game.pushScene()
       game.pushScene( game.titleScene() );      //シーンをゲームに追加する
       //bgm.play();
-  }
+    }
 
 
 	//ポーズ（一時停止）シーン
-  game.pauseScene = function(){
-    var scene = new Scene();
-    scene.backgroundColor = 'rgba(0,0,0,0.5)';
-    msg1 = new Label();
+    game.pauseScene = function(){
+        var scene = new Scene();
+        scene.backgroundColor = 'rgba(0,0,0,0.5)';
+        msg1 = new Label();
   	msg1.color = 'white';
   	msg1.font = "normal normal 30px/1.0 monospace";
   	msg1.text = "Pause!";

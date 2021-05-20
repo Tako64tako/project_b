@@ -536,6 +536,10 @@ addEventListener( 'load', function() {
 
     var goal_flag = false;      //ゴールしたかどうかを判定する
 
+    //ゲームオーバー後のフレームのカウント
+    var gameover_framcount = 0;
+    var gameover_framecount_gil = 0;
+
     //残機と制限時間、スコアのラベル
     var livesLabel = new Label();
     livesLabel.font = "16px 'Russo One', sans-serif";
@@ -568,7 +572,25 @@ addEventListener( 'load', function() {
         livesLabel.text = '残機：' + Gilbert.lives;
         livesLabel.y = 5;
         scene.addChild(livesLabel);
-        if (Gilbert.lives === 0) game.replaceScene(game.gameOverScene());
+        if (Gilbert.lives <= 0) {
+          goal_flag = true;
+          Gilbert.opacity = 1;
+          if(gameover_framcount % 6 == 0){
+
+            Gilbert.frame = (gameover_framecount_gil % 8) + 81;
+            gameover_framecount_gil ++;
+
+          }
+          if(gameover_framcount >= 48){
+            
+            game.replaceScene(game.gameOverScene());
+          
+          }else{
+
+            gameover_framcount ++;
+
+          }
+        }
 
         //スコア表示
         scoresLabel.text = 'SCORE : ' + scores;
@@ -590,6 +612,7 @@ addEventListener( 'load', function() {
 
     var enemy1; //敵スプライトの変数宣言
     var enemy2; //敵スプライトの変数宣言
+
 
     var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
     var Gil_firstposition = [64,240]//プレイヤーの初期スポーン位置
@@ -756,7 +779,8 @@ addEventListener( 'load', function() {
         {
             //pair[0]: Bulletのインスタンス
             //pair[1]: Enemy1のインスタンス
-
+            
+            scores += 100;
             pair[0].remove();
             pair[1].remove();
 
@@ -767,11 +791,25 @@ addEventListener( 'load', function() {
         {
             //pair[0]: Bulletのインスタンス
             //pair[1]: Enemy1のインスタンス
-
+            
+            scores += 200;
             pair[0].remove();
             pair[1].remove();
 
         });
+
+
+        //無敵時間管理
+        if(invincible_flag == true){ //無敵フラグがtrueなら
+                
+          invincible_count ++ //無敵時間をカウント
+          
+        }
+        if(invincible_count == 30){ //無敵時間が3秒になったら
+          invincible_flag = false; //無敵を解除
+          invincible_count = 0; //無敵時間を初期化
+          Gilbert.opacity = 1; //Gilbertの透明度を1にする
+        }
 
 
         //===========================================
@@ -786,16 +824,18 @@ addEventListener( 'load', function() {
                 goal_framecount ++ //ゴールしてからの時間を計測
                 game.time = game.time; //ゲーム内の時間をクリアした時間で固定
                 //スコア追加
-                if(framecount_set == 15){
-                    scores += game.time;
-                    scores += Gilbert.lives * 100;
-                }
+                
+                scores += game.time;
+                scores += Gilbert.lives * 100;
+                
                 Gilbert.x = Gilbert.x; //Gilbertのx軸を固定
+
                 if(Gilbert.jumpFlg == false){ //ジャンプが終わった後にフレームを動かす
 
                     Gilbert.frame = goal_framecount % 2 +  53;
 
                 }
+
             }
             if(framecount_set == 90){
                 //alert("Game Clear");
@@ -867,23 +907,8 @@ addEventListener( 'load', function() {
             if(this.x >= enemy1max || this.x <= enemy1min){
                 enemydx = -enemydx;
             }
-            //弾との当たり判定
-            if( bullet_pos_x - this.x > -10 && bullet_pos_x - this.x < 10){
-                if(bullet_pos_y - this.y > -15 && bullet_pos_y - this.y < 15){
-                    this.remove();
-                    bullet.remove();
-                    scores += 100;
-                }
-            }
-            //無敵時間管理
-            if(invincible_flag == true){ //無敵フラグがtrueなら
-                invincible_count ++ //無敵時間をカウント
-            }
-            if(invincible_count == 45){ //無敵時間が3秒になったら
-                invincible_flag = false; //無敵を解除
-                invincible_count = 0; //無敵時間を初期化
-                Gilbert.opacity = 1; //Gilbertの透明度を1にする
-            }
+            
+            
             //Gilbertとの当たり判定
             if(invincible_flag == false){
                 if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){
@@ -920,23 +945,7 @@ addEventListener( 'load', function() {
             if(this.y >= enemy2max || this.y <= enemy2min){
                 enemydy = -enemydy;
             }
-            //弾との当たり判定
-            if( bullet_pos_x - this.x > -10 && bullet_pos_x - this.x < 10){
-                if(bullet_pos_y - this.y > -20 && bullet_pos_y - this.y < 20){
-                    this.remove();
-                    bullet.remove();
-                    scores += 200;
-                }
-            }
-            //無敵時間管理
-            if(invincible_flag == true){ //無敵フラグがtrueなら
-                invincible_count ++ //無敵時間をカウント
-            }
-            if(invincible_count == 45){ //無敵時間が3秒になったら
-                invincible_flag = false; //無敵を解除
-                invincible_count = 0; //無敵時間を初期化
-                Gilbert.opacity = 1; //Gilbertの透明度を1にする
-            }
+            
             //Gilbertとの当たり判定
             if(invincible_flag == false){
                 if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){

@@ -818,15 +818,17 @@ addEventListener( 'load', function() {
 
         if(Gilbert.x >= goal.x){
             goal_flag = true;
+            //スコア追加
+            //framecount_setが0の時のみ加算を行う
+            if(framecount_set == 0){
+              scores += game.time;
+              scores += Gilbert.lives * 100;
+            }
             framecount_set ++
             if(framecount_set % 3 == 0 ){
 
                 goal_framecount ++ //ゴールしてからの時間を計測
                 game.time = game.time; //ゲーム内の時間をクリアした時間で固定
-                //スコア追加
-                
-                scores += game.time;
-                scores += Gilbert.lives * 100;
                 
                 Gilbert.x = Gilbert.x; //Gilbertのx軸を固定
 

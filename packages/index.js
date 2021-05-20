@@ -40,6 +40,16 @@ addEventListener( 'load', function() {
         }
     }
     */
+   function twitText() {
+	var s, url;
+	s = "横スクロール型シューティングゲームのチュートリアルでscore:";
+  m = "獲得したよ!!"
+	url = document.location.href;
+  h = "#プロジェクト演習"
+			//投稿画面を開く
+			url = "http://twitter.com/share?url=" + escape(url) + encodeURIComponent("チュートリアルステージの得点は:" + scores + "でした") + "&hashtags=プロジェクト演習";
+			window.open(url,"_blank","width=600,height=300");
+}
 
   game.onload = function(){
       //game.pushScene()
@@ -342,6 +352,7 @@ addEventListener( 'load', function() {
   	msg2.color = 'white';
   	msg2.font = "normal normal 25px/1.0 monospace";
   	msg2.text = "ツイートする";
+    twitText();
     msg2.moveTo(165,295);
 
     msg3 = new Label();

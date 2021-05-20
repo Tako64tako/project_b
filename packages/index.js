@@ -228,6 +228,7 @@ addEventListener( 'load', function() {
   	msg2.color = 'white';
   	msg2.font = "normal normal 25px/1.0 monospace";
   	msg2.text = "再挑戦";
+    scores =0;
     msg2.moveTo(183,245);
 
     msg3 = new Label();

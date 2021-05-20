@@ -16,11 +16,15 @@ addEventListener( 'load', function() {
     game.preload('../img/flag/flag_red_transparent.png')
     game.preload('../img/character/enemy1.png');
     game.preload('../img/character/enemy2.png');
+    game.preload('../img/arrow.png');
+    game.preload('../img/arrow2.png');
+
     game.keybind( 'Z'.charCodeAt(0), 'a' );     //Zキー入力をaボタンとする
 		game.keybind( 'Q'.charCodeAt(0), 'b' );     //Qキー入力をbボタンとする
+    game.keybind(32, "c");                      //Spaceキーをcボタンとする
 
     var bgmsound = Sound.load('../bgm/bgm1.mp3');
-        bgmsound.volume = 0.5;
+         bgmsound.volume = 0.5;
     var jumpsound = Sound.load('../bgm/jump.mp3');
     var bulettsound = Sound.load('../bgm/laser.mp3');
 
@@ -37,37 +41,141 @@ addEventListener( 'load', function() {
     }
     */
 
-    game.onload = function(){
+  game.onload = function(){
       //game.pushScene()
       game.pushScene( game.titleScene() );      //シーンをゲームに追加する
       //bgm.play();
-    }
+  }
 
 
 	//ポーズ（一時停止）シーン
-    game.pauseScene = function(){
-        var scene = new Scene();
-        scene.backgroundColor = 'rgba(0,0,0,0.5)';
-        msg1 = new Label();
+  game.pauseScene = function(){
+    bgmsound.pause();
+    var scene = new Scene();
+    scene.backgroundColor = 'rgba(0,0,0,0)';
+
+    var windows = new Sprite(270, 270);
+    var surface = new Surface( 270, 270);
+    windows.image = surface;
+    windows.moveTo(100,100);
+    surface.context.fillStyle = "gray";
+    surface.context.fillRect (0, 0, 270, 270);
+
+
+    var surface1 = new Surface( 155, 40);
+    surface1.context.fillStyle = "green";
+    surface1.context.fillRect (0, 0, 155, 40);
+
+    var surface2 = new Surface( 155, 40);
+    surface2.context.fillStyle = "orange";
+    surface2.context.fillRect (0, 0, 155, 40);
+
+    var surface3 = new Surface( 155, 40);
+    surface3.context.fillStyle = "red";
+    surface3.context.fillRect (0, 0, 155, 40);
+
+    var continue_button = new Sprite(155, 40);
+    continue_button.image = surface1;
+    continue_button.moveTo(153,170);
+
+    var replay_button = new Sprite(155, 40);
+    replay_button.image = surface2;
+    replay_button.moveTo(153,235);
+
+    var backStageSelect_button = new Sprite(155, 40);
+    backStageSelect_button.image = surface3;
+    backStageSelect_button.moveTo(153,300);
+
+    pause_msg = new Label();
+  	pause_msg.color = 'white';
+  	pause_msg.font = "normal normal 40px/1.0 monospace";
+  	pause_msg.text = "PAUSE";
+    pause_msg.moveTo(168,120);
+
+    msg1 = new Label();
   	msg1.color = 'white';
-  	msg1.font = "normal normal 30px/1.0 monospace";
-  	msg1.text = "Pause!";
-    msg1.moveTo(180,150);
-	  scene.addChild(msg1);
-		msg2 = new Label();
+  	msg1.font = "normal normal 25px/1.0 monospace";
+  	msg1.text = "続ける";
+    msg1.moveTo(193,180);
+
+    msg2 = new Label();
   	msg2.color = 'white';
-  	msg2.font = "normal normal 30px/1.0 monospace";
-  	msg2.text = "Tap 'Z' to Restart!";
-    msg2.moveTo(120,250);
-	  scene.addChild(msg2);
-    //console.log("pause!");
-    scene.addEventListener(Event.ENTER_FRAME, function(e) {
-      if ( game.input.a ) {
-        bulettsound.play();
-        bgmsound.pause();
-        game.popScene();
+  	msg2.font = "normal normal 25px/1.0 monospace";
+  	msg2.text = "初めから";
+    msg2.moveTo(183,245);
+
+    msg3 = new Label();
+  	msg3.color = 'white';
+  	msg3.font = "normal normal 25px/1.0 monospace";
+  	msg3.text = "セレクト画面へ";
+    msg3.moveTo(153,310);
+
+    var arrow = new Sprite(32,32);       //ゴールイラスト
+    var arrow_pos= [108,170,235,300];       //ゴールの位置
+    arrow.image = game.assets["../img/arrow.png"];
+    arrow.x = arrow_pos[0];
+    arrow.y = arrow_pos[1];
+
+
+    scene.addChild(windows);
+    scene.addChild(continue_button);
+    scene.addChild(replay_button);
+    scene.addChild(backStageSelect_button);
+
+    scene.addChild(pause_msg);
+    scene.addChild(msg1);
+    scene.addChild(msg2);
+    scene.addChild(msg3);
+
+    scene.addChild(arrow);
+
+
+    var speed = 2;
+    var frame_cnt = 5;
+    arrow.onenterframe = function() {
+      this.x += speed;
+      if(this.x >= arrow_pos[0]+10 || this.x <= arrow_pos[0]){
+        speed = -speed;
       }
-    });
+
+      if(game.input.up && frame_cnt >= 5){
+        if(this.y != arrow_pos[1]){
+          this.y -= 65;
+          frame_cnt = 0;
+        }
+      }
+      if (game.input.down && frame_cnt >= 5) {
+        if(this.y != arrow_pos[3]){
+          this.y += 65;
+          frame_cnt = 0;
+        }
+      }
+
+      frame_cnt++;
+
+      if(game.input.c){//Spaceキーで決定
+        switch (this.y) {
+          case arrow_pos[1]:
+            //console.log("continue");
+            bgmsound.pause();
+            game.popScene(this);
+            break;
+
+          case arrow_pos[2]:
+            //console.log("retry");
+            game.popScene(this);
+            bgmsound.stop();
+            game.replaceScene(game.mainScene() );
+            break;
+
+          case arrow_pos[3]:
+            //console.log("select");
+            window.history.back();
+            break;
+        }
+      }
+    }
+
     return scene;
   }
 
@@ -76,9 +184,9 @@ addEventListener( 'load', function() {
     scene.backgroundColor = 'black';
     score = new Label();
   	score.color = 'white';
-  	score.font = "normal normal 30px/1.0 monospace";
+  	score.font = "normal normal 40px/1.0 monospace";
   	score.text = "Click to start!";
-    score.moveTo(150,225);
+    score.moveTo(120,225);
 	  scene.addChild(score);
     scene.ontouchstart = function(){
       //console.log("startTime = " + startTime);    // コンソールに表示
@@ -89,20 +197,228 @@ addEventListener( 'load', function() {
 
   //ゲームオーバー、デバッグ用なので変えてもいいし消しても大丈夫
   game.gameOverScene = function() {
-        var scene = new Scene();
-        scene.backgroundColor = 'black';
-        var gameOverLabel = new Label( 'GAME OVER' );
-        gameOverLabel.color = 'white';
-        gameOverLabel.font = "32px 'Russo One', sans-serif";
-        gameOverLabel.moveTo( 130, 225 );
-        scene.addChild( gameOverLabel );
+    bgmsound.stop();
+    var scene = new Scene();
+    scene.backgroundColor = 'black';
 
-        return scene;
+    var surface2 = new Surface( 155, 40);
+    surface2.context.fillStyle = "orange";
+    surface2.context.fillRect (0, 0, 155, 40);
+
+    var surface3 = new Surface( 155, 40);
+    surface3.context.fillStyle = "red";
+    surface3.context.fillRect (0, 0, 155, 40);
+
+    var replay_button = new Sprite(155, 40);
+    replay_button.image = surface2;
+    replay_button.moveTo(153,235);
+
+    var backStageSelect_button = new Sprite(155, 40);
+    backStageSelect_button.image = surface3;
+    backStageSelect_button.moveTo(153,300);
+
+    gameover_msg = new Label();
+  	gameover_msg.color = 'white';
+  	gameover_msg.font = "normal normal 40px/1.0 monospace";
+  	gameover_msg.text = "Game Over";
+    gameover_msg.moveTo(125,120);
+
+
+    msg2 = new Label();
+  	msg2.color = 'white';
+  	msg2.font = "normal normal 25px/1.0 monospace";
+  	msg2.text = "再挑戦";
+    msg2.moveTo(183,245);
+
+    msg3 = new Label();
+  	msg3.color = 'white';
+  	msg3.font = "normal normal 25px/1.0 monospace";
+  	msg3.text = "セレクト画面へ";
+    msg3.moveTo(153,310);
+
+    var arrow = new Sprite(32,32);       //ゴールイラスト
+    var arrow_pos= [108,235,300];       //ゴールの位置
+    arrow.image = game.assets["../img/arrow2.png"];
+    arrow.x = arrow_pos[0];
+    arrow.y = arrow_pos[1];
+
+    scene.addChild(replay_button);
+    scene.addChild(backStageSelect_button);
+    scene.addChild(gameover_msg);
+    scene.addChild(msg2);
+    scene.addChild(msg3);
+    scene.addChild(arrow);
+
+    var speed = 2;
+    var frame_cnt = 5;
+    arrow.onenterframe = function() {
+      this.x += speed;
+      if(this.x >= arrow_pos[0]+10 || this.x <= arrow_pos[0]){
+        speed = -speed;
+      }
+      if(game.input.up && frame_cnt >= 5){
+        if(this.y != arrow_pos[1]){
+          this.y -= 65;
+          frame_cnt = 0;
+        }
+      }
+      if (game.input.down && frame_cnt >= 5) {
+        if(this.y != arrow_pos[2]){
+          this.y += 65;
+          frame_cnt = 0;
+        }
+      }
+      frame_cnt++;
+      if(game.input.c){//Spaceキーで決定
+        switch (this.y) {
+          case arrow_pos[1]:
+            //console.log("retry");
+            game.popScene(this);
+            bgmsound.stop();
+            game.replaceScene(game.mainScene() );
+            break;
+
+          case arrow_pos[2]:
+            //console.log("select");
+            window.history.back();
+            break;
+        }
+      }
     }
+    return scene;
+  }
+
+  //ゲームクリアシーン
+  game.ClearScene = function() {
+    bgmsound.stop();
+    var scene = new Scene();
+    scene.backgroundColor = 'white';
+
+
+    var surface1 = new Surface( 155, 40);
+    surface1.context.fillStyle = "green";
+    surface1.context.fillRect (0, 0, 155, 40);
+
+    var surface2 = new Surface( 155, 40);
+    surface2.context.fillStyle = "blue";
+    surface2.context.fillRect (0, 0, 155, 40);
+
+    var surface3 = new Surface( 155, 40);
+    surface3.context.fillStyle = "red";
+    surface3.context.fillRect (0, 0, 155, 40);
+
+    var continue_button = new Sprite(155, 40);
+    continue_button.image = surface1;
+    continue_button.moveTo(153,220);
+
+    var replay_button = new Sprite(155, 40);
+    replay_button.image = surface2;
+    replay_button.moveTo(153,285);
+
+    var backStageSelect_button = new Sprite(155, 40);
+    backStageSelect_button.image = surface3;
+    backStageSelect_button.moveTo(153,350);
+
+    clear_msg = new Label();
+  	clear_msg.color = 'black';
+  	clear_msg.font = "normal normal 40px/1.0 monospace";
+  	clear_msg.text = "Game Clear";
+    clear_msg.moveTo(120,80);
+
+    score_msg = new Label();
+  	score_msg.color = 'black';
+  	score_msg.font = "normal normal 30px/1.0 monospace";
+  	score_msg.text = "SCORE : "+scores;
+    score_msg.moveTo(130,135);
+
+    msg1 = new Label();
+  	msg1.color = 'white';
+  	msg1.font = "normal normal 25px/1.0 monospace";
+  	msg1.text = "次ステージ";
+    msg1.moveTo(175,230);
+
+    msg2 = new Label();
+  	msg2.color = 'white';
+  	msg2.font = "normal normal 25px/1.0 monospace";
+  	msg2.text = "ツイートする";
+    msg2.moveTo(165,295);
+
+    msg3 = new Label();
+  	msg3.color = 'white';
+  	msg3.font = "normal normal 25px/1.0 monospace";
+  	msg3.text = "セレクト画面へ";
+    msg3.moveTo(153,360);
+
+    var arrow = new Sprite(32,32);       //ゴールイラスト
+    var arrow_pos= [108,220,285,350];       //ゴールの位置
+    arrow.image = game.assets["../img/arrow.png"];
+    arrow.x = arrow_pos[0];
+    arrow.y = arrow_pos[1];
+
+
+    scene.addChild(continue_button);
+    scene.addChild(replay_button);
+    scene.addChild(backStageSelect_button);
+
+    scene.addChild(clear_msg);
+    scene.addChild(score_msg);
+    scene.addChild(msg1);
+    scene.addChild(msg2);
+    scene.addChild(msg3);
+
+    scene.addChild(arrow);
+
+
+    var speed = 2;
+    var frame_cnt = 5;
+    arrow.onenterframe = function() {
+      this.x += speed;
+      if(this.x >= arrow_pos[0]+10 || this.x <= arrow_pos[0]){
+        speed = -speed;
+      }
+
+      if(game.input.up && frame_cnt >= 5){
+        if(this.y != arrow_pos[1]){
+          this.y -= 65;
+          frame_cnt = 0;
+        }
+      }
+      if (game.input.down && frame_cnt >= 5) {
+        if(this.y != arrow_pos[3]){
+          this.y += 65;
+          frame_cnt = 0;
+        }
+      }
+
+      frame_cnt++;
+
+      if(game.input.c){//Spaceキーで決定
+        switch (this.y) {
+          case arrow_pos[1]:
+            //console.log("retry");
+            game.popScene(this);
+            bgmsound.stop();
+            game.replaceScene(game.mainScene() );
+            break;
+
+          case arrow_pos[2]:
+            //Twitter処理
+            break;
+
+          case arrow_pos[3]:
+            //console.log("select");
+            window.history.back();
+            break;
+        }
+      }
+    }
+
+    return scene;
+  }
     //メインシーン
-    game.mainScene = function() {
-        var scene = new Scene();        //シーンを作成
-        //scene.backgroundColor = '#00BFFF';    //ブロックおいてないとこの色（前まで白色だったとこ）
+  game.mainScene = function() {
+    var scene = new Scene();        //シーンを作成
+    //scene.backgroundColor = '#00BFFF';    //ブロックおいてないとこの色（前まで白色だったとこ）
     scene.backgroundColor = 'skyblue';
 
     //========================
@@ -144,26 +460,26 @@ addEventListener( 'load', function() {
 			[ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
 			[ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
 			[ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8,32,32,32, 8, 8,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8,32,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16],
-      [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16],
-      [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16]
+            [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8,32,32,32, 8, 8,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8, 8, 8,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [ 8, 8, 8, 8, 8, 8,32,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
+            [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16],
+            [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16],
+            [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16]
     ];
 
 
@@ -179,26 +495,26 @@ addEventListener( 'load', function() {
 			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1],
-      [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1],
-      [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ];
     //========================
 
@@ -216,7 +532,7 @@ addEventListener( 'load', function() {
 
     //無敵管理
     var invincible_flag = false;    //無敵かどうかのフラグ　true = 無敵
-    var invincible_count = 0;   //無敵時間のカウント（フレーム数） 
+    var invincible_count = 0;   //無敵時間のカウント（フレーム数）
 
     var goal_flag = false;      //ゴールしたかどうかを判定する
 
@@ -242,7 +558,7 @@ addEventListener( 'load', function() {
             }
         }
     });
-    
+
     scene.addChild(timesLabel);
 
     //残機とスコア用処理
@@ -296,7 +612,7 @@ addEventListener( 'load', function() {
 	      //----------------------------
 	      if ( game.input.b ) {
 	        bulettsound.play();
-	        bgmsound.pause();
+
 	        game.pushScene(game.pauseScene());
 	      }
         if (game.input.up && Gilbert.jumpingFlg === false && goal_flag == false) {
@@ -338,12 +654,10 @@ addEventListener( 'load', function() {
 
             }
         }
-        
-        //落とし穴処理
+         //落とし穴処理
         if(Gilbert.y > 480){
             game.replaceScene(game.gameOverScene())
         }
-        
         //左に落ちないようにする処理
             if(Gilbert.x == 0){
                 Gilbert.x += 4;
@@ -439,10 +753,10 @@ addEventListener( 'load', function() {
 
         //BulletクラスとEnemy1クラスとの当たり判定
         Bullet.intersect(Enemy1).forEach(function(pair)
-{
+        {
             //pair[0]: Bulletのインスタンス
             //pair[1]: Enemy1のインスタンス
-            
+
             pair[0].remove();
             pair[1].remove();
 
@@ -450,10 +764,10 @@ addEventListener( 'load', function() {
 
         //BulletクラスとEnemy2クラスとの当たり判定
         Bullet.intersect(Enemy2).forEach(function(pair)
-{
+        {
             //pair[0]: Bulletのインスタンス
             //pair[1]: Enemy1のインスタンス
-            
+
             pair[0].remove();
             pair[1].remove();
 
@@ -484,7 +798,8 @@ addEventListener( 'load', function() {
                 }
             }
             if(framecount_set == 90){
-                alert("Game Clear");
+                //alert("Game Clear");
+                game.replaceScene(game.ClearScene());
             }
         }
         else{
@@ -493,7 +808,7 @@ addEventListener( 'load', function() {
 
         }
 
-    }); 
+    });
 		var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
 
 
@@ -504,7 +819,7 @@ addEventListener( 'load', function() {
         var bulletX, bulletY;   //弾のX座標とY座標
         Sprite.call( this, 16, 16 );    //Spriteクラスのメソッドを、thisでも使えるようにする
             this.image = game.assets[ '../img/bullet/icon0.png' ];  //スプライトの画像ファイルを指定
-            
+
 
         //プレイヤーの向きによって弾の位置や動かす方向を変える
         if ( Gilbert.scaleX >= 0 ) {

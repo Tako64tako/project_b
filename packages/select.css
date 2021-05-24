@@ -59,9 +59,9 @@ body{
 
 p.caption {
     font-size: 0.7em;
-    text-align: center;
+    text-align: left;
     position: fixed;
     width: 100%;
-    bottom: 0;
+    bottom: 0%;
     letter-spacing: 0.2em;
     text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0); }

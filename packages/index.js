@@ -4,6 +4,18 @@ enchant();
 var game;
 var scores = 0;
 
+function twitText() {
+	var s, url;
+	s = "横スクロール型シューティングゲームのチュートリアルでscore:";
+  m = "獲得したよ!!"
+	url = document.location.href;
+  h = "#プロジェクト演習"
+			//投稿画面を開く
+			url = "http://twitter.com/share?url="  + encodeURIComponent("チュートリアルステージの得点は" + scores + "点でした!!\n") +  escape(url) + "\n\n" + "&hashtags=プロジェクト演習";
+      window.open(url,"_blank","width=600,height=300");
+}
+
+
 //Webページが読み込まれたら
 addEventListener( 'load', function() {
     game = new Core(480,480);   //ゲームオブジェクトの作成
@@ -40,16 +52,6 @@ addEventListener( 'load', function() {
         }
     }
     */
-   function twitText() {
-	var s, url;
-	s = "横スクロール型シューティングゲームのチュートリアルでscore:";
-  m = "獲得したよ!!"
-	url = document.location.href;
-  h = "#プロジェクト演習"
-			//投稿画面を開く
-			url = "http://twitter.com/share?url=" + escape(url) + encodeURIComponent("チュートリアルステージの得点は:" + scores + "でした") + "&hashtags=プロジェクト演習";
-			window.open(url,"_blank","width=600,height=300");
-}
 
   game.onload = function(){
       //game.pushScene()
@@ -352,7 +354,6 @@ addEventListener( 'load', function() {
   	msg2.color = 'white';
   	msg2.font = "normal normal 25px/1.0 monospace";
   	msg2.text = "ツイートする";
-    twitText();
     msg2.moveTo(165,295);
 
     msg3 = new Label();
@@ -379,6 +380,7 @@ addEventListener( 'load', function() {
     scene.addChild(msg3);
 
     scene.addChild(arrow);
+    var i =0;
 
 
     var speed = 2;
@@ -415,6 +417,11 @@ addEventListener( 'load', function() {
 
           case arrow_pos[2]:
             //Twitter処理
+            
+            if(i == 0){
+              twitText();
+              i =1;
+            }
             break;
 
           case arrow_pos[3]:

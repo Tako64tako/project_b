@@ -182,7 +182,7 @@ addEventListener( 'load', function() {
 
           case arrow_pos[3]:
             //console.log("select");
-            window.history.back();
+            window.location = "select.html";
             break;
         }
       }
@@ -601,9 +601,9 @@ addEventListener( 'load', function() {
 
           }
           if(gameover_framcount >= 48){
-            
+
             game.replaceScene(game.gameOverScene());
-          
+
           }else{
 
             gameover_framcount ++;
@@ -798,7 +798,7 @@ addEventListener( 'load', function() {
         {
             //pair[0]: Bulletのインスタンス
             //pair[1]: Enemy1のインスタンス
-            
+
             scores += 100;
             pair[0].remove();
             pair[1].remove();
@@ -810,7 +810,7 @@ addEventListener( 'load', function() {
         {
             //pair[0]: Bulletのインスタンス
             //pair[1]: Enemy1のインスタンス
-            
+
             scores += 200;
             pair[0].remove();
             pair[1].remove();
@@ -820,9 +820,9 @@ addEventListener( 'load', function() {
 
         //無敵時間管理
         if(invincible_flag == true){ //無敵フラグがtrueなら
-                
+
           invincible_count ++ //無敵時間をカウント
-          
+
         }
         if(invincible_count == 30){ //無敵時間が3秒になったら
           invincible_flag = false; //無敵を解除
@@ -848,7 +848,7 @@ addEventListener( 'load', function() {
 
                 goal_framecount ++ //ゴールしてからの時間を計測
                 game.time = game.time; //ゲーム内の時間をクリアした時間で固定
-                
+
                 Gilbert.x = Gilbert.x; //Gilbertのx軸を固定
 
                 if(Gilbert.jumpFlg == false){ //ジャンプが終わった後にフレームを動かす
@@ -928,8 +928,8 @@ addEventListener( 'load', function() {
             if(this.x >= enemy1max || this.x <= enemy1min){
                 enemydx = -enemydx;
             }
-            
-            
+
+
             //Gilbertとの当たり判定
             if(invincible_flag == false){
                 if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){
@@ -966,7 +966,7 @@ addEventListener( 'load', function() {
             if(this.y >= enemy2max || this.y <= enemy2min){
                 enemydy = -enemydy;
             }
-            
+
             //Gilbertとの当たり判定
             if(invincible_flag == false){
                 if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){

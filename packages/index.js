@@ -421,8 +421,12 @@ addEventListener( 'load', function() {
             if(i == 0){
               twitText();
               i =1;
+              game.popScene(this);
+              bgmsound.stop();
+              game.replaceScene(game.ClearScene() );
             }
-            break;
+
+            // break;
 
           case arrow_pos[3]:
             //console.log("select");

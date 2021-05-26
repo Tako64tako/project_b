@@ -16,10 +16,10 @@ addEventListener( 'load', function() {
     game.preload('../img/flag/flag_red_transparent.png')
     game.preload('../img/character/enemy1.png');
     game.preload('../img/character/enemy2.png');
+    game.preload('../img/character/Dragon1.png');
     game.preload('../img/arrow.png');
     game.preload('../img/arrow2.png');
     game.preload('../img/flag/castle2.png');
-    game.preload('../img/character/Dragon1.png');
 
     game.keybind( 'Z'.charCodeAt(0), 'a' );     //Zキー入力をaボタンとする
 		game.keybind( 'Q'.charCodeAt(0), 'b' );     //Qキー入力をbボタンとする
@@ -42,12 +42,12 @@ addEventListener( 'load', function() {
         }
     }
     */
-   function twitText() {
-	var s, url;
-	s = "横スクロール型シューティングゲームのチュートリアルでscore:";
-  m = "獲得したよ!!"
-	url = document.location.href;
-  h = "#プロジェクト演習"
+    function twitText() {
+        var s, url;
+        s = "横スクロール型シューティングゲームのチュートリアルでscore:";
+        m = "獲得したよ!!"
+        url = document.location.href;
+        h = "#プロジェクト演習"
 			//投稿画面を開く
 			url = "http://twitter.com/share?url=" + escape(url) + encodeURIComponent("チュートリアルステージの得点は:" + scores + "でした") + "&hashtags=プロジェクト演習";
 			window.open(url,"_blank","width=600,height=300");
@@ -549,7 +549,7 @@ addEventListener( 'load', function() {
     var invincible_count = 0;   //無敵時間のカウント（フレーム数）
 
     var goal_flag = false;      //ゴールしたかどうかを判定する
-
+      
     //ゲームオーバー後のフレームのカウント
     var gameover_framcount = 0;
     var gameover_framecount_gil = 0;
@@ -631,10 +631,13 @@ addEventListener( 'load', function() {
     Castle.x = 2490;
     Castle.y = 273;
       
-
-    //var enemy1; //敵スプライトの変数宣言
-    //var enemy2; //敵スプライトの変数宣言
-
+      //ブレス用フラグ
+      var breath;
+      var breath_flag = true;
+      var dragon_flag = true;
+      var breath_count = 0;
+      var breath_pos_x = 0;       //弾の位置を他のオブジェクトの位置と比べる際に使用するx座標の値
+      var breath_pos_y = 0;       //弾の位置を他のオブジェクトの位置と比べる際に使用するy座標の値
 
     var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
     var Gil_firstposition = [64,400]//プレイヤーの初期スポーン位置 //64,400
@@ -787,11 +790,14 @@ addEventListener( 'load', function() {
 
         if(bullet_count==10)bullet_flag=true;       //フレームカウントが10になった時、弾を打てるようにする
 
+        //敵キャラ表示
         if( i == 0){
             enemy1 = new Enemy1;
             stage.addChild(enemy1);
             enemy2 = new Enemy2;
             stage.addChild(enemy2);
+            dragon1 = new Dragon1;
+            stage.addChild(dragon1);
             i = 1;
         }
 
@@ -814,12 +820,32 @@ addEventListener( 'load', function() {
             //pair[0]: Bulletのインスタンス
             //pair[1]: Enemy1のインスタンス
             
-            scores += 200;
+            scores += 300;
             pair[0].remove();
             pair[1].remove();
 
         });
 
+        //Bulletクラスとdragon1クラスとの当たり判定
+        Bullet.intersect(Dragon1).forEach(function(pair)
+        {
+            //pair[0]: Bulletのインスタンス
+            //pair[1]: Enemy1のインスタンス
+            dragon_flag = false;
+            scores += 500;
+            pair[0].remove();
+            pair[1].remove();
+        });
+        
+        //BreathクラスとGilbertクラスとの当たり判定
+        Breath.intersect(Gilbert).forEach(function(pair)
+        {
+            //pair[0]: Breathのインスタンス
+            Gilbert.lives--;
+            pair[0].remove();
+            pair[1].remove();
+            invincible_flag = true;
+        });
 
         //無敵時間管理
         if(invincible_flag == true){ //無敵フラグがtrueなら
@@ -952,56 +978,134 @@ addEventListener( 'load', function() {
     var enemy1max = enemy1x + 50;
     //var enemy1 = new Enemy1();
 
-    var Enemy2 = Class.create( Sprite, {
-        initialize: function() {
-            Sprite.call(this, 20, 30);
-            this.image = game.assets["../img/character/enemy2.png"];
-            this.moveTo(enemy2x, enemy2y);
-            this.frame = 1;
-        },
-        onenterframe: function() {
-            this.y += enemydy;
-            this.frame = (this.age%15) + 1;
-            if(this.y >= enemy2max || this.y <= enemy2min){
-                enemydy = -enemydy;
-            }
+      //敵キャラ２初期設定
+      var enemy2x = 500;
+      var enemy2y = 355;
+      var enemydy = 3;
+      var enemy2min = enemy2y - 50;
+      var enemy2max = enemy2y + 50;
+      var Enemy2 = Class.create( Sprite, {
+          initialize: function() {
+              Sprite.call(this, 20, 30);
+              this.image = game.assets['../img/character/enemy2.png'];
+              this.moveTo(enemy2x, enemy2y);
+              this.frame = 1;
+          },
+          onenterframe: function() {
+              this.y += enemydy;
+              this.frame = (this.age%15) + 1;
+              if(this.y >= enemy2max || this.y <= enemy2min){
+                  enemydy = -enemydy;
+              }
             
-            //Gilbertとの当たり判定
-            if(invincible_flag == false){
-                if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){
-                    if(Gilbert.y - this.y > -21 && Gilbert.y - this.y < 21){
-                        Gilbert.lives -= 1; //Gilbertの残機を1減らす
-                        invincible_flag = true; //無敵フラグをtrueに
-                        Gilbert.opacity = 0.7; //Gilbertの透明度を0.7にする
-                    }
-                }
-            }
-        }
-    });
-		//敵キャラ２初期設定
-		var enemy2x = 500;
-		var enemy2y = 355;
-		var enemydy = 3;
-		var enemy2min = enemy2y - 50;
-		var enemy2max = enemy2y + 50;
+              //Gilbertとの当たり判定
+              if(invincible_flag == false){
+                  if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){
+                      if(Gilbert.y - this.y > -21 && Gilbert.y - this.y < 21){
+                          Gilbert.lives -= 1; //Gilbertの残機を1減らす
+                          invincible_flag = true; //無敵フラグをtrueに
+                          Gilbert.opacity = 0.7; //Gilbertの透明度を0.7にする
+                      }
+                  }
+              }
+          }
+      });
       
-      var dragon1x = 700;
-      var dragon1y = 400;
-      var dragondx = 3;
-      var dragondy = 3;
+      //ブレス（ドラゴン）設定
+      var breathline = true;
+      var breathX = dragon1x;
+      var breathY = dragon1y;   //ブレスのX座標とY座標
+      var Breath = Class.create( Sprite, {
+          initialize: function() {
+              Sprite.call( this, 16, 16 );    //Spriteクラスのメソッドを、thisでも使えるようにする
+              this.image = game.assets[ '../img/bullet/icon0.png' ];  //スプライトの画像ファイルを指定
+              this.frame = 1;
+
+              //ドラゴンの向きによって弾の位置や動かす方向を変える
+              if (breathline==true) {
+                  this.speed = 8;
+                  breathX = Dragon1.x;
+                  this.frame = 62;
+              } else {
+                  this.speed = -8;
+                  breathX = Dragon1.x;
+                  this.frame = 58;
+              }
+              breathY = Dragon1.y + 6;
+              breath_pos_y = breathY;
+              this.moveTo( breathX, breathY );    //弾の位置
+          },
+          onenterframe: function() {
+              this.x += this.speed;   //弾の移動
+              breath_pos_x = this.x;
+              if(this.x > Dragon1.x + 200 || this.x < Dragon1.x - 200){       //弾の削除
+                  this.remove();
+              };
+              //if(backgroundMap.hitTest(breath.x + 9 ,breath.y + 10)){
+                  //this.remove();
+              //}
+          }
+      });
       
-      // ギルバートに近づいてくる
+      
+      // ドラゴン（移動砲台）設定
+      var dragon1x = 300;
+      var dragon1y = 405;
+      var dragondx = 1;
+      var dragondy = 1;
       var Dragon1 = Class.create( Sprite, {
         initialize: function() {
-            Sprite.call(this, 36, 30);
+            Sprite.call(this, 38, 30);
             this.image = game.assets["../img/character/Dragon1.png"];
             this.moveTo(dragon1x, dragon1y);
             this.frame = 1;
         },
         onenterframe: function() {
-            if(Gilbert.x - this.x > 480 && this.x - Gilbert.x < 480) {
-                
+            if(Gilbert.x - this.x < 480 || this.x - Gilbert.x < 480) {
+                if(Gilbert.x > this.x) {
+                    this.x += dragondx;
+                    this.frame = (this.age%3) + 12;
+                }else if(Gilbert.x < this.x){
+                    this.x -= dragondx;
+                    this.frame = (this.age%3) + 6;
+                    breathline = false;
+                }else{
+                    this.x = Gilbert.x;
+                }
+            }else{
+                this.x = dragon1x;
+                this.y = dragon1y;
             }
+            if(Gilbert.x - this.x < 480 || this.x - Gilbert.x < 480) {
+                if(Gilbert.y > this.y) {
+                    this.y += dragondy;
+                }else if(Gilbert.y < this.y){
+                    this.y -= dragondx;
+                }else{
+                    this.y = Gilbert.y;
+                }
+            }else{
+                this.x = dragon1x;
+                this.y = dragon1y;
+            }
+            
+            //ブレス処理
+            if(breath_flag==true && dragon_flag==true){
+                //前に弾を打った時から10フレームが経過時
+                HitABreath();
+                function HitABreath() {
+                    //弾を作成
+                    breath = new Breath();
+                    stage.addChild( breath );
+                    breath_flag = false;
+                    breath_count = 0;
+                }
+            }
+            if(breath_flag==false){     //前に弾を打った時から10フレーム立っていない時
+                breath_count++;     //フレームのカウントを行う
+            }
+            if(breath_count==20) breath_flag=true;       //フレームカウントが10になった時、弾を打てるようにする
+
             
             //Gilbertとの当たり判定
             if(invincible_flag == false){
@@ -1016,6 +1120,7 @@ addEventListener( 'load', function() {
         }
     });
       
+            
     //var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
 
     

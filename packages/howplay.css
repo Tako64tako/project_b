@@ -22,7 +22,6 @@ img.stage{
     z-index: 0;
     position:absolute;
     bottom:5%;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
 }
 
 .page{
@@ -203,6 +202,116 @@ img.stage{
 	color: #000;
 }
 .junp:hover .box1 {
+	z-index: 2;
+	display: block;
+}
+
+
+.bullet{
+  position: absolute;
+	width: 40px;
+	height: 60px;
+	z-index: 1;
+  display: inline-block;
+  left: 38%;
+  right:40%;
+  margin:1%;
+  z-index: 1;
+  bottom:19.7%;
+}
+
+.bullet:hover{
+    filter: opacity(70%);
+    cursor: pointer;
+}
+
+.bullet img {
+	width: 100%;
+	height: 100%;
+}
+.bullet .box2 {
+	position:absolute;
+	width: 100px; /* 吹き出しの幅 */
+	height: 30px; /* 吹き出しの高さ */
+	top: -36px; /* 吹き出しと三角形の高さをプラスした値 */
+	left: 0;
+	border-radius: 10px 10px 10px 10px;
+	background-color: #e0edff;
+	display: none;
+}
+.bullet .box2:after { /* 三角形を作成 */
+	position: absolute;
+	content: "";
+	width: 0;
+	height: 0;
+	top: 30px; /* 吹き出しの高さと同じ値 */
+	left: 18px;
+	border: 8px solid transparent;
+	border-top: 8px solid #e0edff;
+}
+.bullet .text2 {
+	font-size: 12px;
+	position: absolute;
+	top: -7px;
+	left: 9px;
+	color: #000;
+}
+.bullet:hover .box2 {
+	z-index: 2;
+	display: block;
+}
+
+
+.enemy{
+  position: absolute;
+	width: 40px;
+	height: 60px;
+	z-index: 1;
+  display: inline-block;
+  left: 45%;
+  right:1%;
+  margin:1%;
+  z-index: 1;
+  bottom:18.0%;
+}
+
+.enemy:hover{
+    filter: opacity(70%);
+    cursor: pointer;
+}
+
+.enemy img {
+	width: 100%;
+	height: 100%;
+}
+.enemy .box3 {
+	position:absolute;
+	width: 100px; /* 吹き出しの幅 */
+	height: 50px; /* 吹き出しの高さ */
+	top: -56px; /* 吹き出しと三角形の高さをプラスした値 */
+	left: 0;
+	border-radius: 10px 10px 10px 10px;
+	background-color: #e0edff;
+	display: none;
+}
+.enemy .box3:after { /* 三角形を作成 */
+	position: absolute;
+	content: "";
+	width: 0;
+	height: 0;
+	top: 50px; /* 吹き出しの高さと同じ値 */
+	left: 18px;
+	border: 8px solid transparent;
+	border-top: 8px solid #e0edff;
+}
+.enemy .text3 {
+	font-size: 12px;
+	position: absolute;
+	top: -7px;
+	left: 9px;
+	color: #000;
+}
+.enemy:hover .box3 {
 	z-index: 2;
 	display: block;
 }

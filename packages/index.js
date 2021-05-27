@@ -20,7 +20,7 @@ function twitText() {
 addEventListener( 'load', function() {
     game = new Core(480,480);   //ゲームオブジェクトの作成
     // フレームレートの設定。15fpsに設定
-    game.fps = 15;//ゲーム画面のフレームレート　毎秒１５枚のアニメーションで構成
+    game.fps = 15;//ゲーム画面のフレームレート毎秒１５枚のアニメーションで構成
     game.preload( '../img/character/Gilbert2.png' );    //画像をプリロード
     game.preload('../img/map/map1.png');
     game.preload('../img/map/map2.png');
@@ -35,10 +35,10 @@ addEventListener( 'load', function() {
 		game.keybind( 'Q'.charCodeAt(0), 'b' );     //Qキー入力をbボタンとする
     game.keybind(32, "c");                      //Spaceキーをcボタンとする
 
-    var bgmsound = Sound.load('../bgm/bgm1.mp3');
-         bgmsound.volume = 0.5;
-    var jumpsound = Sound.load('../bgm/jump.mp3');
-    var bulettsound = Sound.load('../bgm/laser.mp3');
+    // var bgmsound = Sound.load('../bgm/bgm1.mp3');
+    // bgmsound.volume = 0.5;
+    // var jumpsound = Sound.load('../bgm/jump.mp3');
+    // var bulettsound = Sound.load('../bgm/laser.mp3');
 
 
     //マップとの接触判定　いらない
@@ -62,7 +62,7 @@ addEventListener( 'load', function() {
 
 	//ポーズ（一時停止）シーン
   game.pauseScene = function(){
-    bgmsound.pause();
+    // bgmsound.pause();
     var scene = new Scene();
     scene.backgroundColor = 'rgba(0,0,0,0)';
 
@@ -169,14 +169,14 @@ addEventListener( 'load', function() {
         switch (this.y) {
           case arrow_pos[1]:
             //console.log("continue");
-            bgmsound.pause();
+            // bgmsound.pause();
             game.popScene(this);
             break;
 
           case arrow_pos[2]:
             //console.log("retry");
             game.popScene(this);
-            bgmsound.stop();
+            // bgmsound.stop();
             game.replaceScene(game.mainScene() );
             break;
 
@@ -209,7 +209,7 @@ addEventListener( 'load', function() {
 
   //ゲームオーバー、デバッグ用なので変えてもいいし消しても大丈夫
   game.gameOverScene = function() {
-    bgmsound.stop();
+    // bgmsound.stop();
     var scene = new Scene();
     scene.backgroundColor = 'black';
 
@@ -287,7 +287,7 @@ addEventListener( 'load', function() {
           case arrow_pos[1]:
             //console.log("retry");
             game.popScene(this);
-            bgmsound.stop();
+            // bgmsound.stop();
             game.replaceScene(game.mainScene() );
             break;
 
@@ -303,7 +303,7 @@ addEventListener( 'load', function() {
 
   //ゲームクリアシーン
   game.ClearScene = function() {
-    bgmsound.stop();
+    // bgmsound.stop();
     var scene = new Scene();
     scene.backgroundColor = 'white';
 
@@ -411,7 +411,7 @@ addEventListener( 'load', function() {
           case arrow_pos[1]:
             //console.log("retry");
             game.popScene(this);
-            bgmsound.stop();
+            // bgmsound.stop();
             game.replaceScene(game.mainScene() );
             break;
 
@@ -422,7 +422,7 @@ addEventListener( 'load', function() {
               twitText();
               i =1;
               game.popScene(this);
-              bgmsound.stop();
+              // bgmsound.stop();
               game.replaceScene(game.ClearScene() );
             }
 
@@ -649,19 +649,19 @@ addEventListener( 'load', function() {
     Gilbert.lives = 5; // 残機数
     Gilbert.addEventListener(Event.ENTER_FRAME, function(e) {
                 //bgm.loop();
-        bgmsound.play();
+        // bgmsound.play();
 
 				//----------------------------
 	      //Qキーで一ゲームを一時停止
 	      //----------------------------
 	      if ( game.input.b ) {
-	        bulettsound.play();
+	        // bulettsound.play();
 
 	        game.pushScene(game.pauseScene());
 	      }
         if (game.input.up && Gilbert.jumpingFlg === false && goal_flag == false) {
            Gilbert.jumpFlg = true;
-           jumpsound.play();
+          //  jumpsound.play();
         }
 
         if(goal_flag == false){
@@ -763,7 +763,7 @@ addEventListener( 'load', function() {
         if(bullet_flag==true && goal_flag == false){
 
             if ( game.input.a ) {
-              bulettsound.play();
+              // bulettsound.play();
               hitABullet();
             }
         //前に弾を打った時から10フレームが経過かつ'zキーが押された時'

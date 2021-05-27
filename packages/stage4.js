@@ -541,7 +541,7 @@ addEventListener( 'load', function() {
     var bullet_flag = true;     //間隔が10フレームあいたかを判断
 
     var goal = new Sprite(32,32);       //ゴールイラスト
-    var goal_pos = [590,400];       //ゴールの位置
+    var goal_pos = [440,400];       //ゴールの位置
     goal.image = game.assets["../img/flag/flag_red_transparent.png"];
     goal.x = goal_pos[0];
     goal.y = goal_pos[1];

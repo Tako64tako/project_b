@@ -18,6 +18,9 @@ addEventListener( 'load', function() {
   game.preload('../img/character/enemy2.png');
   game.preload('../img/character/bigmonster2.png');
   game.preload('../img/bullet/bossbullet.png');
+  game.preload('../img/bullet/bossfire.png');
+  game.preload('../img/bullet/bossfire2.png');
+
 
   game.preload('../img/arrow.png');
   game.preload('../img/arrow2.png');
@@ -438,11 +441,7 @@ addEventListener( 'load', function() {
       [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
       [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
       [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
-      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
-      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
-      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
+      [78, 8, 8,78, 8, 8,78, 8, 8,78, 8, 8,78, 8, 8,78, 8, 8,78, 8, 8,78, 8, 8,78, 8, 8,78, 8,78],
       [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
       [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
       [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
@@ -451,6 +450,10 @@ addEventListener( 'load', function() {
       [78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78],
       [78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78],
       [78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78],
+      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
+      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
+      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
+      [78,78,78,70,70,70,70,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,70,70,70,70,78,78,78],
       [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
       [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
       [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
@@ -485,7 +488,7 @@ addEventListener( 'load', function() {
       [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [ 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1],
       [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -500,7 +503,7 @@ addEventListener( 'load', function() {
     backgroundMap.loadData(block);
     backgroundMap.collisionData = col_block;
 
-    var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
+    //var stage = new Group();//マップとキャラクターを同時に管理するためにグループとして統括（スクロールするときに必要）
 
 
     var bullet_pos_x = 0;       //弾の位置を他のオブジェクトの位置と比べる際に使用するx座標の値
@@ -508,6 +511,10 @@ addEventListener( 'load', function() {
 
     var b_bullet_pos_x = 0;       //弾の位置を他のオブジェクトの位置と比べる際に使用するx座標の値
     var b_bullet_pos_y = 0;       //弾の位置を他のオブジェクトの位置と比べる際に使用するy座標の値
+    var b_fire_pos_x = 0;
+    var b_fire_pos_y = 0;
+    var b_bfire_pos_x = 0;
+    var b_bfire_pos_y = 0;
 
     //無敵管理
     var invincible_flag = false;    //無敵かどうかのフラグ　true = 無敵
@@ -551,7 +558,7 @@ addEventListener( 'load', function() {
     var enemy_lives = 10;
 
     var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
-    var Gil_firstposition = [64,240]//プレイヤーの初期スポーン位置
+    var Gil_firstposition = [64,300]//プレイヤーの初期スポーン位置
     Gilbert.image = game.assets["../img/character/Gilbert2.png"];
     Gilbert.x = Gil_firstposition[0];
     Gilbert.y = Gil_firstposition[1];
@@ -559,7 +566,7 @@ addEventListener( 'load', function() {
     Gilbert.frame = 1;//プレイヤーのアニメーションの画像　これを変更するとプレイヤーの画像が変わってモーションが作れる（歩くとか）
     Gilbert.jumpFlg = false;//ジャンプしてるかどうかのフラグ
     Gilbert.jumpingFlg = false;//ジャンプ中がどうかのフラグ
-    Gilbert.jumpPower = 8; //プレイヤーのジャンプ力　大きくするほど高く飛べる
+    Gilbert.jumpPower = 11; //プレイヤーのジャンプ力　大きくするほど高く飛べる
     Gilbert.lives = 5; // 残機数
     Gilbert.addEventListener(Event.ENTER_FRAME, function(e) {
       bgmsound.play();
@@ -646,11 +653,7 @@ addEventListener( 'load', function() {
       if(Gilbert.y > 480){
           game.replaceScene(game.gameOverScene())
       }
-      //左に落ちないようにする処理
-      if(Gilbert.x == 0){
-          Gilbert.x += 4;
-          Gilbert.scaleX = -1;
-      }
+
 
       //=============
       //ジャンプ処理
@@ -680,8 +683,13 @@ addEventListener( 'load', function() {
                   Gilbert.y++;
                   Gilbert.jumpingFlg = false;
                   Gilbert.jumpFlg = false;
-                  Gilbert.jumpPower = 8;
-                  Gilbert.frame = 30
+                  Gilbert.jumpPower = 11;
+                  if (Gilbert.scaleX == -1) {
+                    Gilbert.frame = 10;
+                  }else{
+                    Gilbert.frame = 1;
+                  }
+
                   break;
               }
           }
@@ -710,7 +718,7 @@ addEventListener( 'load', function() {
         function hitABullet() {
           //弾を作成
           bullet = new Bullet();
-          stage.addChild( bullet );
+          scene.addChild( bullet );
           bullet_flag = false;
           bullet_count = 0;
         }
@@ -753,6 +761,22 @@ addEventListener( 'load', function() {
         }
         invincible_flag = true; //無敵フラグをtrueに
       });
+      //Gilbertとの当たり判定
+      BossFire.intersect(Gilbert).forEach(function(pair){
+        if(invincible_flag == false){
+          Gilbert.lives -= 1; //Gilbertの残機を1減らす
+          Gilbert.opacity = 0.7; //Gilbertの透明度を0.7にする
+        }
+        invincible_flag = true; //無敵フラグをtrueに
+      });
+      //Gilbertとの当たり判定
+      BossBigFire.intersect(Gilbert).forEach(function(pair){
+        if(invincible_flag == false){
+          Gilbert.lives -= 1; //Gilbertの残機を1減らす
+          Gilbert.opacity = 0.7; //Gilbertの透明度を0.7にする
+        }
+        invincible_flag = true; //無敵フラグをtrueに
+      });
       /*
       //BulletクラスとEnemy2クラスとの当たり判定
       Bullet.intersect(Enemy2).forEach(function(pair)
@@ -770,7 +794,7 @@ addEventListener( 'load', function() {
       if(invincible_flag == true){ //無敵フラグがtrueなら
         invincible_count ++ //無敵時間をカウント
       }
-      if(invincible_count == 30){ //無敵時間が2秒になったら
+      if(invincible_count == 45){ //無敵時間が3秒になったら
         invincible_flag = false; //無敵を解除
         invincible_count = 0; //無敵時間を初期化
         Gilbert.opacity = 1; //Gilbertの透明度を1にする
@@ -809,11 +833,13 @@ addEventListener( 'load', function() {
       }
 
       //プレイヤーのX座標に合わせて画面をスクロール
+      /*
       if(stage.x > 128 - Gilbert.x){
           stage.x = 128 - Gilbert.x;
       }else if(stage.x < 80 - Gilbert.x){
           stage.x = 80 - Gilbert.x;
       }
+      */
 
     });//Gilbert.addEventListenerが終了
 
@@ -857,6 +883,7 @@ addEventListener( 'load', function() {
     });
 
     /**bossの弾のクラス**/
+    //シャドーボール
     var BossBullet = Class.create( Sprite, {
       initialize: function() {
         var b_bulletX, b_bulletY;   //弾のX座標とY座標
@@ -865,28 +892,111 @@ addEventListener( 'load', function() {
 
         //プレイヤーの向きによって弾の位置や動かす方向を変える
         if ( enemy1.scaleX >= 0 ) {
-          this.speed = -15;
-          b_bulletX = enemy1.x - 9.25 ;
+          this.speed = -13;
+          b_bulletX = enemy1.x - 15 ;
         } else {
-          this.speed = 15;
+          this.speed = 13;
           b_bulletX = enemy1.x + 25 ;
 
         }
-        b_bulletY = enemy1.y + 36;
+        var i = getRandomInt(2);
+        switch (i) {
+          case 0:
+            b_bulletY = enemy1.y + 5;
+            break;
+
+          case 1:
+            b_bulletY = enemy1.y + 35;
+            break;
+        }
+        //b_bulletY = Gilbert.y;
         b_bullet_pos_y = b_bulletY;
-
-        console.log(b_bulletX);
-        console.log(b_bulletY);
-
-
         this.moveTo( b_bulletX, b_bulletY );    //弾の位置
       },
       onenterframe: function() {
         this.x += this.speed;   //弾の移動
         b_bullet_pos_x = this.x;
-        if(backgroundMap.hitTest(b_bullet.x + 9 ,b_bullet.y + 10)){
+        if(this.x > 480 || this.x < -32){       //弾の削除
             this.remove();
+        };
+      }
+    });
+    //火柱（小）（速い）
+    var BossFire = Class.create( Sprite, {
+      initialize: function() {
+        var b_fireX, b_fireY;   //弾のX座標とY座標
+        Sprite.call( this, 20, 28 );    //Spriteクラスのメソッドを、thisでも使えるようにする
+        this.image = game.assets[ '../img/bullet/bossfire.png' ];  //スプライトの画像ファイルを指定
+        this.frame = 3;
+
+        //プレイヤーの向きによって弾の位置や動かす方向を変える
+        if ( enemy1.scaleX >= 0 ) {
+          this.speed = -20;
+          b_fireX = enemy1.x - 15 ;
+        } else {
+          this.speed = 20;
+          b_fireX = enemy1.x + 25 ;
+
         }
+
+        b_fireY = enemy1.y + 52;
+        //b_bulletY = Gilbert.y;
+        b_fire_pos_y = b_fireY;
+
+        //console.log(b_bulletX);
+        //console.log(b_bulletY);
+
+
+        this.moveTo( b_fireX, b_fireY );    //弾の位置
+      },
+      onenterframe: function() {
+        this.x += this.speed;   //弾の移動
+        b_fire_pos_x = this.x;
+        if(this.x > 480 || this.x < -20){       //弾の削除
+            this.remove();
+        };
+      }
+    });
+
+    var BossBigFire = Class.create( Sprite, {
+      initialize: function() {
+        var b_bfireX, b_bfireY;   //弾のX座標とY座標
+        Sprite.call( this, 30, 126 );    //Spriteクラスのメソッドを、thisでも使えるようにする
+        this.image = game.assets[ '../img/bullet/bossfire2.png' ];  //スプライトの画像ファイルを指定
+        this.frame = 2;
+
+        //プレイヤーの向きによって弾の位置や動かす方向を変える
+        if ( enemy1.scaleX >= 0 ) {
+          this.speed = -20;
+          b_bfireX = enemy1.x - 5 ;
+        } else {
+          this.speed = 20;
+          b_bfireX = enemy1.x + 35 ;
+
+        }
+
+        b_bfireY = enemy1.y - 46;
+        //b_bulletY = Gilbert.y;
+        b_bfire_pos_y = b_bfireY;
+
+        //console.log(b_bulletX);
+        //console.log(b_bulletY);
+
+
+        this.moveTo( b_bfireX, b_bfireY );    //弾の位置
+      },
+      onenterframe: function() {
+        if(this.frame == 5){
+          this.frame = 0;
+          this.x += this.speed;   //弾の移動
+          b_bfire_pos_x = this.x;
+        }else{
+          this.frame++;
+        }
+
+        if(this.x > 480 || this.x < -30){       //弾の削除
+            this.remove();
+        };
       }
     });
 
@@ -896,7 +1006,18 @@ addEventListener( 'load', function() {
     }
 
 
+
+    var rnd = 0;
     var cnt =0;
+    var b_cnt = 0;
+    var f_cnt = 0;
+
+    //攻撃用フラグ、合計発生フレーム
+    var atack1_flg = 0;
+    var atack2_flg = 0;
+    var atack3_flg = 0;
+
+
     //ボスモンスター
     var BossEnemy = Class.create( Sprite, {
       initialize: function() {
@@ -907,22 +1028,117 @@ addEventListener( 'load', function() {
       },
       onenterframe: function() {
 
-        var i = getRandomInt(50);
+        //console.log(rnd);
 
-        if (i == 1) {
-          console.log("攻撃！");
-          //弾を作成
-          b_bullet = new BossBullet();
-          stage.addChild( b_bullet );
+
+        if (atack1_flg == 0 && atack2_flg == 0 && atack3_flg==0) {
+          //攻撃をさせる乱数　高くするほど攻撃頻度の期待は下がる
+          rnd = getRandomInt(30);
+
+          if(rnd==1){
+            atack1_flg = 30;
+            console.log("flg 1");
+            //b_cnt =0;
+          }else if (rnd==2) {
+            atack2_flg = 30;
+            console.log("flg 2");
+            //f_cnt =0;
+          }else if (rnd==3) {
+            atack3_flg = 30;
+            console.log("flg 3");
+          }
         }
-        //同じ位置になった時の処理
-        if (Math.abs(Gilbert.x-16 - this.x-15)<80 ) {
+
+        //ここにボスの攻撃処理をかく
+
+        //パターン１　シャドーボールで攻撃
+        if (atack1_flg <= 30 && atack1_flg > 0) {
+          console.log("shadow ball");
+          enemydx = 0;
+          if(atack1_flg >= 15){
+            this.frame =8;
+            atack1_flg--;
+            return;
+          }else if (atack1_flg > 1) {
+            this.frame = 9
+            atack1_flg--;
+            return;
+          }else if(atack1_flg == 1){
+            //atack1_flg = 0の時
+            //弾を作成
+            this.frame = 9
+            b_bullet = new BossBullet();
+            scene.addChild( b_bullet );
+            atack1_flg--;
+            console.log("atack1_flg : " + atack1_flg);
+
+          }
+        }
+
+        //パターン2　小さな火柱を生成　弾速早い
+        if (atack2_flg <= 30 && atack2_flg > 0) {
+          console.log("flame");
+          enemydx = 0;
+          if(atack2_flg >= 5){
+            this.frame =5;
+            //console.log("構え");
+            atack2_flg--;
+            return;
+          }else if (atack2_flg > 1) {
+            //console.log("発射手前");
+
+            this.frame = 6;
+            atack2_flg--;
+            return;
+          }else if (atack2_flg == 1) {
+            //atack1_flg = 0の時
+            //弾を作成
+            //弾を作成
+            this.frame = 6;
+            b_fire = new BossFire();
+            scene.addChild( b_fire );
+            atack2_flg--;
+            console.log("atack2_flg : " + atack2_flg);
+          }
+
+        }
+
+        //パターン2　大きな火柱を生成　弾速遅い
+        if (atack3_flg <= 30 && atack3_flg > 0) {
+          console.log("Bigflame");
+          enemydx = 0;
+          if(atack3_flg >= 5){
+            this.frame =5;
+            //console.log("構え");
+            atack3_flg--;
+            return;
+          }else if (atack3_flg > 1) {
+            //console.log("発射手前");
+
+            this.frame = 7;
+            atack3_flg--;
+            return;
+          }else if (atack3_flg == 1) {
+            //atack1_flg = 0の時
+            //弾を作成
+            //弾を作成
+            this.frame = 7;
+            b_bfire = new BossBigFire();
+            scene.addChild( b_bfire );
+            atack3_flg--;
+            console.log("atack3_flg : " + atack3_flg);
+          }
+
+        }
+
+        //ボスの移動処理
+        if (Math.abs(Gilbert.x-16 - this.x-15)<200 ) {
           enemydx = 0;
           this.frame = 3;
-
-          //ここにボスの攻撃処理をかく
-          cnt = 0;
-
+          if (Gilbert.x-16 > this.x-15) {
+            this.scaleX = -1;
+          }
+          //return;
 
         }else{
           //ギルバートに向かって歩き続ける（ギルバートが右側の時の処理）
@@ -975,8 +1191,11 @@ addEventListener( 'load', function() {
             this.scaleX = 1;
           }
         }
+
+
         this.x += enemydx;
         //console.log(cnt);
+        return;
       }
     });
 
@@ -984,13 +1203,13 @@ addEventListener( 'load', function() {
     var enemy1 = new BossEnemy();
 
 
-    stage.addChild(backgroundMap);
-    stage.addChild(goal);
-    stage.addChild(enemy1);
-    stage.addChild(Gilbert);
+    scene.addChild(backgroundMap);
+    //stage.addChild(goal);
+    scene.addChild(enemy1);
+    scene.addChild(Gilbert);
     //stage.addChild(enemy2);
 
-    scene.addChild(stage);
+    //scene.addChild(stage);
 
     return scene;
   }

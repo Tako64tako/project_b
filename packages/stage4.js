@@ -9,31 +9,37 @@ addEventListener( 'load', function() {
   game = new Core(480,480);   //ゲームオブジェクトの作成
   // フレームレートの設定。15fpsに設定
   game.fps = 15;//ゲーム画面のフレームレート　毎秒１５枚のアニメーションで構成
-  game.preload( '../img/character/Gilbert2.png' );    //画像をプリロード
+
+  //***
+  //画像をプリロード
+  game.preload( '../img/character/Gilbert2.png' );
   game.preload('../img/map/map1.png');
   game.preload('../img/map/map2.png');
   game.preload('../img/bullet/icon0.png');
-  game.preload('../img/flag/flag_red_transparent.png')
   game.preload('../img/character/enemy1.png');
   game.preload('../img/character/enemy2.png');
   game.preload('../img/character/bigmonster2.png');
   game.preload('../img/bullet/bossbullet.png');
   game.preload('../img/bullet/bossfire.png');
   game.preload('../img/bullet/bossfire2.png');
-
-
   game.preload('../img/arrow.png');
   game.preload('../img/arrow2.png');
+  //***
 
-
+  //ボタン設定
   game.keybind( 'Z'.charCodeAt(0), 'a' );     //Zキー入力をaボタンとする
   game.keybind( 'Q'.charCodeAt(0), 'b' );     //Qキー入力をbボタンとする
   game.keybind(32, "c");                      //Spaceキーをcボタンとする
 
+  // ゲーム音の設定
   var bgmsound = Sound.load('../bgm/bgm1.mp3');
   bgmsound.volume = 0.5;
   var jumpsound = Sound.load('../bgm/jump.mp3');
   var bulettsound = Sound.load('../bgm/laser.mp3');
+  var boss_bulllet_sound = Sound.load('../bgm/launcher2.mp3');
+  var boss_fire_sound = Sound.load('../bgm/fire1.mp3');
+  var boss_bigfire_sound = Sound.load('../bgm/BigFire.mp3');
+  boss_bigfire_sound.volume = 0.6;
 
   //残機と制限時間、スコアのラベル
   var livesLabel = new Label();
@@ -163,6 +169,7 @@ addEventListener( 'load', function() {
 
           case arrow_pos[2]:
             //console.log("retry");
+            scores = 0;
             game.popScene(this);
             bgmsound.stop();
             game.replaceScene(game.mainScene() );
@@ -185,13 +192,24 @@ addEventListener( 'load', function() {
     scene.backgroundColor = 'black';
     score = new Label();
   	score.color = 'white';
-  	score.font = "normal normal 40px/1.0 monospace";
-  	score.text = "Click to start!";
-    score.moveTo(120,225);
-	  scene.addChild(score);
+  	score.font = "normal normal 28px/1.0 monospace";
+  	score.text = "Click or Press\"SPACE\"";
+    score.moveTo(100,225);
+    score2 = new Label();
+  	score2.color = 'white';
+  	score2.font = "normal normal 28px/1.0 monospace";
+  	score2.text = "to Start !";
+    score2.moveTo(160,260);
+    scene.addChild(score);
+    scene.addChild(score2);
     scene.ontouchstart = function(){
       //console.log("startTime = " + startTime);    // コンソールに表示
       game.replaceScene(game.mainScene() );
+    };
+    scene.onenterframe = function(){
+      if(game.input.c){//Spaceキーで決定
+        game.replaceScene(game.mainScene() );
+      }
     };
     return scene;
   }
@@ -275,6 +293,7 @@ addEventListener( 'load', function() {
         switch (this.y) {
           case arrow_pos[1]:
             //console.log("retry");
+            scores = 0;
             game.popScene(this);
             bgmsound.stop();
             game.replaceScene(game.mainScene() );
@@ -336,8 +355,8 @@ addEventListener( 'load', function() {
     msg1 = new Label();
   	msg1.color = 'white';
   	msg1.font = "normal normal 25px/1.0 monospace";
-  	msg1.text = "次ステージ";
-    msg1.moveTo(175,230);
+  	msg1.text = "もう一度遊ぶ";
+    msg1.moveTo(160,230);
 
     msg2 = new Label();
   	msg2.color = 'white';
@@ -398,6 +417,7 @@ addEventListener( 'load', function() {
         switch (this.y) {
           case arrow_pos[1]:
             //console.log("retry");
+            scores = 0;
             game.popScene(this);
             bgmsound.stop();
             game.replaceScene(game.mainScene() );
@@ -443,20 +463,20 @@ addEventListener( 'load', function() {
       [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
       [78, 8, 8,78, 8, 8,78, 8, 8,78, 8, 8,78, 8, 8,78, 8, 8,78, 8, 8,78, 8, 8,78, 8, 8,78, 8,78],
       [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
-      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
-      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
-      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
-      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
-      [78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78],
-      [78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78],
-      [78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78],
-      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
-      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
-      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
-      [78,78,78,70,70,70,70,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,70,70,70,70,78,78,78],
-      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
-      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
-      [78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78],
+      [70,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,70],
+      [70,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,70],
+      [70,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,70],
+      [70,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,70],
+      [70,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,70],
+      [70,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,70],
+      [70,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,78,78,78, 1, 1,78,78,78,78,70],
+      [70,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,70],
+      [70,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,70],
+      [70,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,70],
+      [70,78,78,70,70,70,70,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,70,70,70,70,78,78,70],
+      [70,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,70],
+      [70,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,70],
+      [70,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,70],
       [70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70],
       [70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70],
       [70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70]
@@ -521,6 +541,8 @@ addEventListener( 'load', function() {
     var invincible_count = 0;   //無敵時間のカウント（フレーム数）
 
     var goal_flag = false;      //ゴールしたかどうかを判定する
+    var goal_framecount = 0;
+    var framecount_set = 0;
 
     //ゲームオーバー後のフレームのカウント
     var gameover_framcount = 0;
@@ -540,13 +562,6 @@ addEventListener( 'load', function() {
     var bullet_count = 0;       //弾の間隔を数える
     var bullet_flag = true;     //間隔が10フレームあいたかを判断
 
-    var goal = new Sprite(32,32);       //ゴールイラスト
-    var goal_pos = [590,400];       //ゴールの位置
-    goal.image = game.assets["../img/flag/flag_red_transparent.png"];
-    goal.x = goal_pos[0];
-    goal.y = goal_pos[1];
-    var goal_framecount = 0;
-    var framecount_set = 0;
 
 
     //敵キャラ１初期設定
@@ -555,10 +570,11 @@ addEventListener( 'load', function() {
     var enemydx = 3;
     var enemy1min = enemy1x - 50;
     var enemy1max = enemy1x + 50;
-    var enemy_lives = 10;
+    var enemy_lives = 3;
 
     var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
     var Gil_firstposition = [64,300]//プレイヤーの初期スポーン位置
+    var Gil_jp = 11;
     Gilbert.image = game.assets["../img/character/Gilbert2.png"];
     Gilbert.x = Gil_firstposition[0];
     Gilbert.y = Gil_firstposition[1];
@@ -566,7 +582,7 @@ addEventListener( 'load', function() {
     Gilbert.frame = 1;//プレイヤーのアニメーションの画像　これを変更するとプレイヤーの画像が変わってモーションが作れる（歩くとか）
     Gilbert.jumpFlg = false;//ジャンプしてるかどうかのフラグ
     Gilbert.jumpingFlg = false;//ジャンプ中がどうかのフラグ
-    Gilbert.jumpPower = 11; //プレイヤーのジャンプ力　大きくするほど高く飛べる
+    Gilbert.jumpPower = Gil_jp; //プレイヤーのジャンプ力　大きくするほど高く飛べる
     Gilbert.lives = 5; // 残機数
     Gilbert.addEventListener(Event.ENTER_FRAME, function(e) {
       bgmsound.play();
@@ -683,7 +699,7 @@ addEventListener( 'load', function() {
                   Gilbert.y++;
                   Gilbert.jumpingFlg = false;
                   Gilbert.jumpFlg = false;
-                  Gilbert.jumpPower = 11;
+                  Gilbert.jumpPower = Gil_jp;
                   if (Gilbert.scaleX == -1) {
                     Gilbert.frame = 10;
                   }else{
@@ -805,7 +821,7 @@ addEventListener( 'load', function() {
       //ゴール処理
       //===========================================
 
-      if(Gilbert.x >= goal.x){
+      if(enemy_lives <= 0){
         goal_flag = true;
         //スコア追加
         //framecount_setが0の時のみ加算を行う
@@ -889,6 +905,8 @@ addEventListener( 'load', function() {
         var b_bulletX, b_bulletY;   //弾のX座標とY座標
         Sprite.call( this, 32, 32 );    //Spriteクラスのメソッドを、thisでも使えるようにする
         this.image = game.assets[ '../img/bullet/bossbullet.png' ];  //スプライトの画像ファイルを指定
+        boss_bulllet_sound.stop();
+        boss_bulllet_sound.play();
 
         //プレイヤーの向きによって弾の位置や動かす方向を変える
         if ( enemy1.scaleX >= 0 ) {
@@ -929,6 +947,8 @@ addEventListener( 'load', function() {
         this.image = game.assets[ '../img/bullet/bossfire.png' ];  //スプライトの画像ファイルを指定
         this.frame = 3;
 
+        boss_fire_sound.play();
+
         //プレイヤーの向きによって弾の位置や動かす方向を変える
         if ( enemy1.scaleX >= 0 ) {
           this.speed = -20;
@@ -954,16 +974,19 @@ addEventListener( 'load', function() {
         b_fire_pos_x = this.x;
         if(this.x > 480 || this.x < -20){       //弾の削除
             this.remove();
+            boss_fire_sound.stop();
         };
       }
     });
-
+    //火柱（大）
     var BossBigFire = Class.create( Sprite, {
       initialize: function() {
         var b_bfireX, b_bfireY;   //弾のX座標とY座標
         Sprite.call( this, 30, 126 );    //Spriteクラスのメソッドを、thisでも使えるようにする
         this.image = game.assets[ '../img/bullet/bossfire2.png' ];  //スプライトの画像ファイルを指定
         this.frame = 2;
+        boss_bigfire_sound.stop();
+        boss_bigfire_sound.play();
 
         //プレイヤーの向きによって弾の位置や動かす方向を変える
         if ( enemy1.scaleX >= 0 ) {
@@ -990,11 +1013,13 @@ addEventListener( 'load', function() {
           this.frame = 0;
           this.x += this.speed;   //弾の移動
           b_bfire_pos_x = this.x;
+          boss_bigfire_sound.stop();
+          boss_bigfire_sound.play();
         }else{
           this.frame++;
         }
 
-        if(this.x > 480 || this.x < -30){       //弾の削除
+        if(this.x > 440 || this.x < 40){       //弾の削除
             this.remove();
         };
       }
@@ -1009,8 +1034,6 @@ addEventListener( 'load', function() {
 
     var rnd = 0;
     var cnt =0;
-    var b_cnt = 0;
-    var f_cnt = 0;
 
     //攻撃用フラグ、合計発生フレーム
     var atack1_flg = 0;

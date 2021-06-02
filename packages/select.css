@@ -53,18 +53,56 @@ p.caption {
     letter-spacing: 0.2em;
     text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0); }
 
-.hover {
-  position: relative;
-  width: 300px;
-  height:200px;
-  overflow: hidden;
-}
-.hover .hover-img {
-  margin: 0;
-  padding: 0;
+.hover1 {
+    position: relative;
+    height: 20em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 5%;
+    padding: 5%;
 }
 
-.hover .hover-text {
+.hover1 .hover-text {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  color: #fff;
+  background-color: rgba(0,0,0,0.65);
+  /*要素の大きさを0にしt表示させない*/
+  transform: scale(0);
+  /*ホバーの動き方*/
+  transition: .35s ease-in-out;
+}
+.hover1 .hover-text .text1 {
+  font-size: 44px;
+  text-align: center;
+}
+.hover1 .hover-text .text2 {
+  font-size: 32px;
+  text-align: center;
+}
+/*ホバーエフェクト*/
+.hover1:hover .hover-text {
+  /*要素の大きさを1にして表示*/
+  transform: scale(1);
+}
+
+
+.hover2 {
+    position: relative;
+    height: 20em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 5%;
+    padding: 5%;
+}
+
+.hover2 .hover-text {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -77,37 +115,92 @@ p.caption {
   /*ホバーの動き方*/
   transition: .35s ease-in-out;
 }
-.hover .hover-text .text1 {
-  font-size: 22px;
-  padding: 10px 20px;
+.hover2 .hover-text .text1 {
+  font-size: 44px;
+  text-align: center;
 }
-.hover .hover-text .text2 {
-  font-size: 16px;
-  padding: 0 20px;
+.hover2 .hover-text .text2 {
+  font-size: 32px;
+  text-align: center;
 }
 /*ホバーエフェクト*/
-.hover:hover .hover-text {
+.hover2:hover .hover-text {
   /*要素の大きさを1にして表示*/
   transform: scale(1);
 }
 
-.hover1-img{
-    width: 45%;
-    height: 45%;
-    text-align: center;
+.hover3 {
+    position: relative;
+    height: 20em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 5%;
+    padding: 5%;
 }
 
-.hover2-img{
-    width: 45%;
-    height: 45%;
+.hover3 .hover-text {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  color: #fff;
+  background-color: rgba(0,0,0,0.65);
+  /*要素の大きさを0にしt表示させない*/
+  transform: scale(0);
+  /*ホバーの動き方*/
+  transition: .35s ease-in-out;
+}
+.hover3 .hover-text .text1 {
+  font-size: 44px;
+  text-align: center;
+}
+.hover3 .hover-text .text2 {
+  font-size: 32px;
+  text-align: center;
+}
+/*ホバーエフェクト*/
+.hover3:hover .hover-text {
+  /*要素の大きさを1にして表示*/
+  transform: scale(1);
 }
 
-.hover3-img{
-    width: 45%;
-    height: 45%;
+.hover4 {
+    position: relative;
+    height: 20em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 5%;
+    padding: 5%;
 }
 
-.hover4-img{
-    width: 45%;
-    height: 45%;
+.hover4 .hover-text {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  color: #fff;
+  background-color: rgba(0,0,0,0.65);
+  /*要素の大きさを0にしt表示させない*/
+  transform: scale(0);
+  /*ホバーの動き方*/
+  transition: .35s ease-in-out;
+}
+.hover4 .hover-text .text1 {
+  font-size: 44px;
+  text-align: center;
+}
+.hover4 .hover-text .text2 {
+  font-size: 32px;
+  text-align: center;
+}
+/*ホバーエフェクト*/
+.hover4:hover .hover-text {
+  /*要素の大きさを1にして表示*/
+  transform: scale(1);
 }

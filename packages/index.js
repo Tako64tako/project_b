@@ -196,13 +196,24 @@ addEventListener( 'load', function() {
     scene.backgroundColor = 'black';
     score = new Label();
   	score.color = 'white';
-  	score.font = "normal normal 40px/1.0 monospace";
-  	score.text = "Click to start!";
-    score.moveTo(120,225);
-	  scene.addChild(score);
+  	score.font = "normal normal 28px/1.0 monospace";
+  	score.text = "Click or Press\"SPACE\"";
+    score.moveTo(100,225);
+    score2 = new Label();
+  	score2.color = 'white';
+  	score2.font = "normal normal 28px/1.0 monospace";
+  	score2.text = "to Start !";
+    score2.moveTo(160,260);
+    scene.addChild(score);
+    scene.addChild(score2);
     scene.ontouchstart = function(){
       //console.log("startTime = " + startTime);    // コンソールに表示
       game.replaceScene(game.mainScene() );
+    };
+    scene.onenterframe = function(){
+      if(game.input.c){//Spaceキーで決定
+        game.replaceScene(game.mainScene() );
+      }
     };
     return scene;
   }
@@ -919,19 +930,22 @@ addEventListener( 'load', function() {
 
     var Enemy1 = Class.create( Sprite, {
         initialize: function() {
-            Sprite.call(this, 20, 30);
+            Sprite.call(this, 20, 28);
             this.image = game.assets["../img/character/enemy1.png"];
             this.moveTo(enemy1x, enemy1y);
             this.frame = 1;
         },
         onenterframe: function() {
             this.x += enemydx;
-            this.frame = (this.age%15) + 1;
+            if(enemydx > 0){
+                this.frame = (this.age%3) + 12;
+            }else{
+                this.frame = (this.age%3) + 6;
+            }
             if(this.x >= enemy1max || this.x <= enemy1min){
                 enemydx = -enemydx;
             }
-
-
+            
             //Gilbertとの当たり判定
             if(invincible_flag == false){
                 if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){
@@ -956,31 +970,37 @@ addEventListener( 'load', function() {
 
 
     var Enemy2 = Class.create( Sprite, {
-        initialize: function() {
-            Sprite.call(this, 20, 30);
-            this.image = game.assets["../img/character/enemy2.png"];
-            this.moveTo(enemy2x, enemy2y);
-            this.frame = 1;
-        },
-        onenterframe: function() {
-            this.y += enemydy;
-            this.frame = (this.age%15) + 1;
-            if(this.y >= enemy2max || this.y <= enemy2min){
-                enemydy = -enemydy;
-            }
-
-            //Gilbertとの当たり判定
-            if(invincible_flag == false){
-                if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){
-                    if(Gilbert.y - this.y > -21 && Gilbert.y - this.y < 21){
-                        Gilbert.lives -= 1; //Gilbertの残機を1減らす
-                        invincible_flag = true; //無敵フラグをtrueに
-                        Gilbert.opacity = 0.7; //Gilbertの透明度を0.7にする
-                    }
-                }
-            }
-        }
-    });
+          initialize: function() {
+              Sprite.call(this, 30, 23);
+              this.image = game.assets['../img/character/enemy2.png'];
+              this.moveTo(enemy2x, enemy2y);
+              this.frame = 1;
+          },
+          onenterframe: function() {
+              this.y += enemydy;
+              if(this.x > Gilbert.x ){
+                  this.frame = (this.age % 3) + 6;
+              }else if(this.x < Gilbert.x) {
+                  this.frame = (this.age % 3) + 12;
+              }else{
+                  this.frame = this.age % 3;
+              }
+              if(this.y >= enemy2max || this.y <= enemy2min){
+                  enemydy = -enemydy;
+              }
+            
+              //Gilbertとの当たり判定
+              if(invincible_flag == false){
+                  if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){
+                      if(Gilbert.y - this.y > -21 && Gilbert.y - this.y < 21){
+                          Gilbert.lives -= 1; //Gilbertの残機を1減らす
+                          invincible_flag = true; //無敵フラグをtrueに
+                          Gilbert.opacity = 0.7; //Gilbertの透明度を0.7にする
+                      }
+                  }
+              }
+          }
+      });
 		//敵キャラ２初期設定
 		var enemy2x = 500;
 		var enemy2y = 355;

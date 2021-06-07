@@ -404,13 +404,7 @@ addEventListener( 'load', function() {
       if(game.input.c){//Spaceキーで決定
         switch (this.y) {
           case arrow_pos[1]:
-            //console.log("retry");
-            scores = 0;
-            game.time = times;
-            gil_hp = 5;
-            game.popScene(this);
-            bgmsound.stop();
-            game.replaceScene(game.mainScene() );
+            window.location.replace("stage3.html");
             break;
 
           case arrow_pos[2]:
@@ -622,7 +616,7 @@ addEventListener( 'load', function() {
 
     //Gilbert設定----------------------------------------------------------------------------------------------------------------------
     var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
-    var Gil_firstposition = [64,400]//プレイヤーの初期スポーン位置 //64,400
+    var Gil_firstposition = [2350,400]//プレイヤーの初期スポーン位置 //64,400
     Gilbert.image = game.assets["../img/character/Gilbert2.png"];
     Gilbert.x = Gil_firstposition[0];
     Gilbert.y = Gil_firstposition[1];
@@ -999,6 +993,11 @@ addEventListener( 'load', function() {
                 enemydx = -enemydx;
             }
             
+            // もしゴール後に敵が残っていたら消す
+            if(goal_flag == true){
+                this.remove();
+            }
+            
             //Gilbertとの当たり判定
             if(invincible_flag == false){
                 if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){
@@ -1036,6 +1035,10 @@ addEventListener( 'load', function() {
                 enemydx = -enemydx;
             }
             
+            // もしゴール後に敵が残っていたら消す
+            if(goal_flag == true){
+                this.remove();
+            }
             
             //Gilbertとの当たり判定
             if(invincible_flag == false){
@@ -1074,6 +1077,10 @@ addEventListener( 'load', function() {
                 enemydx = -enemydx;
             }
             
+            // もしゴール後に敵が残っていたら消す
+            if(goal_flag == true){
+                this.remove();
+            }
             
             //Gilbertとの当たり判定
             if(invincible_flag == false){
@@ -1112,6 +1119,10 @@ addEventListener( 'load', function() {
                 enemydx = -enemydx;
             }
             
+            // もしゴール後に敵が残っていたら消す
+            if(goal_flag == true){
+                this.remove();
+            }
             
             //Gilbertとの当たり判定
             if(invincible_flag == false){
@@ -1151,6 +1162,12 @@ addEventListener( 'load', function() {
               if(this.y >= enemy2max || this.y <= enemy2min){
                   enemydy = -enemydy;
               }
+              
+              // もしゴール後に敵が残っていたら消す
+              if(goal_flag == true){
+                  this.remove();
+              }
+
             
               //Gilbertとの当たり判定
               if(invincible_flag == false){
@@ -1273,6 +1290,11 @@ addEventListener( 'load', function() {
             }
             if(breath_count==20) breath_flag=true;       //フレームカウントが10になった時、弾を打てるようにする
             */
+            
+            // もしゴール後に敵が残っていたら消す
+            if(goal_flag == true){
+                this.remove();
+            }
 
             
             //Gilbertとの当たり判定
@@ -1354,6 +1376,11 @@ addEventListener( 'load', function() {
             }
             if(breath_count==20) breath_flag=true;       //フレームカウントが10になった時、弾を打てるようにする
             */
+
+            // もしゴール後に敵が残っていたら消す
+            if(goal_flag == true){
+                this.remove();
+            }
 
             
             //Gilbertとの当たり判定

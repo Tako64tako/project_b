@@ -946,6 +946,11 @@ addEventListener( 'load', function() {
                 enemydx = -enemydx;
             }
             
+            // もしゴール後に敵が残っていたら消す
+            if(goal_flag == true){
+                this.remove();
+            }
+            
             //Gilbertとの当たり判定
             if(invincible_flag == false){
                 if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){
@@ -987,6 +992,11 @@ addEventListener( 'load', function() {
               }
               if(this.y >= enemy2max || this.y <= enemy2min){
                   enemydy = -enemydy;
+              }
+              
+              // もしゴール後に敵が残っていたら消す
+              if(goal_flag == true){
+                  this.remove();
               }
             
               //Gilbertとの当たり判定

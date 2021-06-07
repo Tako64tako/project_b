@@ -567,7 +567,7 @@ addEventListener( 'load', function() {
     game.time = 300;
     timesLabel.text = '制限時間：' + game.time;
     timesLabel.x = 350;
-    timesLabel.y = 5;
+    timesLabel.y = 3;
     timesLabel.addEventListener('enterframe', function(){
         if(goal_flag == false){
             if(game.frame % game.fps == 0){

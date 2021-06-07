@@ -885,7 +885,7 @@ addEventListener( 'load', function() {
             //pair[0]: Bulletのインスタンス
             //pair[1]: Enemy1のインスタンス
             dragon_flag = false;
-            scores += 500;
+            scores += 550;
             pair[0].remove();
             pair[1].remove();
         });

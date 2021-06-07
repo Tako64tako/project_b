@@ -159,6 +159,7 @@ addEventListener( 'load', function() {
           case arrow_pos[2]:
             game.popScene(this);
             bgmsound.stop();
+            scores = 0;
             game.replaceScene(game.mainScene() );
             break;
           case arrow_pos[3]:
@@ -299,59 +300,61 @@ addEventListener( 'load', function() {
     var scene = new Scene();
     scene.backgroundColor = 'white';
 
+      var btn_x = 180;
+      var btn_y = 40;
 
-    var surface1 = new Surface( 155, 40);
+
+    var surface1 = new Surface( btn_x, btn_y);
     surface1.context.fillStyle = "green";
-    surface1.context.fillRect (0, 0, 155, 40);
+    surface1.context.fillRect (0, 0, btn_x, btn_y);
 
-    var surface2 = new Surface( 155, 40);
+    var surface2 = new Surface( btn_x, btn_y);
     surface2.context.fillStyle = "blue";
-    surface2.context.fillRect (0, 0, 155, 40);
+    surface2.context.fillRect (0, 0, btn_x, btn_y);
 
-    var surface3 = new Surface( 155, 40);
+    var surface3 = new Surface( btn_x, btn_y);
     surface3.context.fillStyle = "red";
-    surface3.context.fillRect (0, 0, 155, 40);
+    surface3.context.fillRect (0, 0, btn_x, btn_y);
 
-    var continue_button = new Sprite(155, 40);
+    var continue_button = new Sprite(btn_x, btn_y);
     continue_button.image = surface1;
     continue_button.moveTo(153,220);
 
-    var replay_button = new Sprite(155, 40);
+    var replay_button = new Sprite(btn_x, btn_y);
     replay_button.image = surface2;
     replay_button.moveTo(153,285);
 
-    var backStageSelect_button = new Sprite(155, 40);
+    var backStageSelect_button = new Sprite(btn_x, 40);
     backStageSelect_button.image = surface3;
     backStageSelect_button.moveTo(153,350);
 
     clear_msg = new Label();
   	clear_msg.color = 'black';
-  	clear_msg.font = "normal normal 40px/1.0 monospace";
+  	clear_msg.font = "40px 'Russo One', sans-serif";
   	clear_msg.text = "Game Clear";
     clear_msg.moveTo(120,80);
 
     score_msg = new Label();
   	score_msg.color = 'black';
-  	score_msg.font = "normal normal 30px/1.0 monospace";
+  	score_msg.font = "30px 'Russo One', sans-serif";
   	score_msg.text = "SCORE : "+scores;
     score_msg.moveTo(130,135);
 
     msg1 = new Label();
   	msg1.color = 'white';
-  	msg1.font = "normal normal 25px/1.0 monospace";
-  	msg1.text = "次ステージ";
-    msg1.moveTo(175,230);
+  	msg1.font = "25px 'Russo One', sans-serif";
+  	msg1.text = "もう一度遊ぶ";
+    msg1.moveTo(160,230);
 
     msg2 = new Label();
   	msg2.color = 'white';
-  	msg2.font = "normal normal 25px/1.0 monospace";
+  	msg2.font = "25px 'Russo One', sans-serif";
   	msg2.text = "ツイートする";
-    twitText();
     msg2.moveTo(165,295);
 
     msg3 = new Label();
   	msg3.color = 'white';
-  	msg3.font = "normal normal 25px/1.0 monospace";
+  	msg3.font = "25px 'Russo One', sans-serif";
   	msg3.text = "セレクト画面へ";
     msg3.moveTo(153,360);
 
@@ -361,15 +364,19 @@ addEventListener( 'load', function() {
     arrow.x = arrow_pos[0];
     arrow.y = arrow_pos[1];
 
+
     scene.addChild(continue_button);
     scene.addChild(replay_button);
     scene.addChild(backStageSelect_button);
+
     scene.addChild(clear_msg);
     scene.addChild(score_msg);
     scene.addChild(msg1);
     scene.addChild(msg2);
     scene.addChild(msg3);
+
     scene.addChild(arrow);
+      var i =0;
 
     var speed = 2;
     var frame_cnt = 5;
@@ -397,13 +404,28 @@ addEventListener( 'load', function() {
       if(game.input.c){//Spaceキーで決定
         switch (this.y) {
           case arrow_pos[1]:
+            //console.log("retry");
+            scores = 0;
+            game.time = times;
+            gil_hp = 5;
             game.popScene(this);
             bgmsound.stop();
             game.replaceScene(game.mainScene() );
             break;
+
           case arrow_pos[2]:
-            break;
+            //Twitter処理
+
+            if(i == 0){
+              twitText();
+              i =1;
+              game.popScene(this);
+              bgmsound.stop();
+              game.replaceScene(game.ClearScene() );
+            }
+
           case arrow_pos[3]:
+            //console.log("select");
             window.history.back();
             break;
         }
@@ -412,6 +434,7 @@ addEventListener( 'load', function() {
 
     return scene;
   }
+
   //-------------------------------------------------------------------------------------------------------------------------------------------------------
   
   //-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -454,7 +477,7 @@ addEventListener( 'load', function() {
             [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
             [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
             [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-            [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 9,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16],
+            [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16],
             [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16],
             [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16]
     ];

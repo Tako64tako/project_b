@@ -420,12 +420,14 @@ addEventListener( 'load', function() {
       if(game.input.c){//Spaceキーで決定
         switch (this.y) {
           case arrow_pos[1]:
-            window.location.replace("stage2.html");
+						//次のステージへ移動
+						window.location.replace("stage2.html");
+
             break;
 
           case arrow_pos[2]:
             //Twitter処理
-            
+
             if(i == 0){
               twitText();
               i =1;
@@ -947,7 +949,6 @@ addEventListener( 'load', function() {
             if(goal_flag == true){
                 this.remove();
             }
-            
             //Gilbertとの当たり判定
             if(invincible_flag == false){
                 if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){

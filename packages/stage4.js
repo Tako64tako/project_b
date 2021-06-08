@@ -966,20 +966,26 @@ addEventListener( 'load', function() {
 
 
 
-
+    //敵クラス、縦移動を行う
     var Enemy2 = Class.create( Sprite, {
         initialize: function() {
-            Sprite.call(this, 20, 30);
+            Sprite.call(this, 30, 24);
             this.image = game.assets["../img/character/enemy2.png"];
             this.moveTo(enemy2x, enemy2y);
-            this.frame = 1;
+            this.frame = 6;
         },
         onenterframe: function() {
-            this.y += enemydy;
-            this.frame = (this.age%15) + 1;
-            if(this.y >= enemy2max || this.y <= enemy2min){
-                enemydy = -enemydy;
-            }
+          this.y += enemydy;
+          if(this.x > Gilbert.x ){
+              this.frame = (this.age % 3) + 6;
+          }else if(this.x < Gilbert.x) {
+              this.frame = (this.age % 3) + 12;
+          }else{
+              this.frame = this.age % 3;
+          }
+          if(this.y >= enemy2max || this.y <= enemy2min){
+              enemydy = -enemydy;
+          }
 
             //Gilbertとの当たり判定
             if(invincible_flag == false){
@@ -1002,9 +1008,9 @@ addEventListener( 'load', function() {
 
 
 
-
-    stage.addChild(backgroundMap);
     stage.addChild(goal);
+    stage.addChild(backgroundMap);
+
     stage.addChild(Gilbert);
 
     //プレイヤーのX座標に合わせて画面をスクロール
@@ -1329,9 +1335,10 @@ addEventListener( 'load', function() {
       {
           //pair[0]: Bulletのインスタンス
           //pair[1]: Enemy1のインスタンス
-          scores += 100;
+          scores += 10;
           enemy_lives -= 1;
           if (enemy_lives <= 0) {
+            scores += 1000;
             pair[1].remove();
           }
           pair[0].remove();
@@ -1623,9 +1630,7 @@ addEventListener( 'load', function() {
     var enemy1x = 320;
     var enemy1y = 360;
     var enemydx = 3;
-    var enemy1min = enemy1x - 50;
-    var enemy1max = enemy1x + 50;
-    var enemy_lives = 3;
+    var enemy_lives = 30;
 
 
     //ボスモンスター

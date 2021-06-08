@@ -580,7 +580,7 @@ addEventListener( 'load', function() {
     scoresLabel.font = "16px 'Russo One', sans-serif";
 
     //制限時間表示
-    game.time = 300;
+    game.time = 100;
     timesLabel.text = '制限時間：' + game.time;
     timesLabel.x = 350;
     timesLabel.y = 5;
@@ -656,7 +656,7 @@ addEventListener( 'load', function() {
     Gilbert.jumpFlg = false;//ジャンプしてるかどうかのフラグ
     Gilbert.jumpingFlg = false;//ジャンプ中がどうかのフラグ
     Gilbert.jumpPower = 8; //プレイヤーのジャンプ力　大きくするほど高く飛べる
-    Gilbert.lives = 5; // 残機数
+    Gilbert.lives = 3; // 残機数
     Gilbert.addEventListener(Event.ENTER_FRAME, function(e) {
                 //bgm.loop();
         bgmsound.play();

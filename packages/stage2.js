@@ -4,7 +4,20 @@ enchant();
 var game;
 var scores = 0;
 
-//Webページが読み込まれたら
+//ツイッター用-----------------------------------------------------------
+function twitText() {
+	var s, url;
+	s = "横スクロール型シューティングゲームのチュートリアルでscore:";
+  m = "獲得したよ!!"
+	url = document.location.href;
+  h = "#プロジェクト演習"
+			//投稿画面を開く
+			url = "http://twitter.com/share?url="  + encodeURIComponent("チュートリアルステージの得点は" + scores + "点でした!!\n") +  escape(url) + "\n\n" + "&hashtags=プロジェクト演習";
+      window.open(url,"_blank","width=600,height=300");
+}
+//----------------------------------------------------------------------
+
+//Webページが読み込まれたら-------------------------------------------------
 addEventListener( 'load', function() {
     game = new Core(480,480);   //ゲームオブジェクトの作成
     // フレームレートの設定。15fpsに設定
@@ -29,19 +42,6 @@ addEventListener( 'load', function() {
          bgmsound.volume = 0.5;
     var jumpsound = Sound.load('../bgm/jump.mp3');
     var bulettsound = Sound.load('../bgm/laser.mp3');
-
-
-    
-  function twitText() {
-      var s, url;
-      s = "横スクロール型シューティングゲームのチュートリアルでscore:";
-      m = "獲得したよ!!"
-      url = document.location.href;
-      h = "#プロジェクト演習"
-      //投稿画面を開く
-      url = "http://twitter.com/share?url=" + escape(url) + encodeURIComponent("チュートリアルステージの得点は:" + scores + "でした") + "&hashtags=プロジェクト演習";
-      window.open(url,"_blank","width=600,height=300");
-  }
 
   game.onload = function(){
       game.pushScene( game.titleScene() );      //シーンをゲームに追加する
@@ -159,6 +159,7 @@ addEventListener( 'load', function() {
           case arrow_pos[2]:
             game.popScene(this);
             bgmsound.stop();
+            scores = 0;
             game.replaceScene(game.mainScene() );
             break;
           case arrow_pos[3]:
@@ -173,17 +174,29 @@ addEventListener( 'load', function() {
   //-------------------------------------------------------------------------------------------------------------------------------------------------------
   
   //-------------------------------------------------------------------------------------------------------------------------------------------------------
+  //タイトルシーン
   game.titleScene = function(){
     var scene = new Scene();
     scene.backgroundColor = 'black';
     score = new Label();
   	score.color = 'white';
-  	score.font = "normal normal 40px/1.0 monospace";
-  	score.text = "Click to start!";
-    score.moveTo(120,225);
-	  scene.addChild(score);
+  	score.font = "normal normal 28px/1.0 monospace";
+  	score.text = "Click or Press\"SPACE\"";
+    score.moveTo(100,225);
+    score2 = new Label();
+  	score2.color = 'white';
+  	score2.font = "normal normal 28px/1.0 monospace";
+  	score2.text = "to Start !";
+    score2.moveTo(160,260);
+    scene.addChild(score);
+    scene.addChild(score2);
     scene.ontouchstart = function(){
       game.replaceScene(game.mainScene() );
+    };
+    scene.onenterframe = function(){
+      if(game.input.c){//Spaceキーで決定
+        game.replaceScene(game.mainScene() );
+      }
     };
     return scene;
   }
@@ -287,59 +300,61 @@ addEventListener( 'load', function() {
     var scene = new Scene();
     scene.backgroundColor = 'white';
 
+      var btn_x = 180;
+      var btn_y = 40;
 
-    var surface1 = new Surface( 155, 40);
+
+    var surface1 = new Surface( btn_x, btn_y);
     surface1.context.fillStyle = "green";
-    surface1.context.fillRect (0, 0, 155, 40);
+    surface1.context.fillRect (0, 0, btn_x, btn_y);
 
-    var surface2 = new Surface( 155, 40);
+    var surface2 = new Surface( btn_x, btn_y);
     surface2.context.fillStyle = "blue";
-    surface2.context.fillRect (0, 0, 155, 40);
+    surface2.context.fillRect (0, 0, btn_x, btn_y);
 
-    var surface3 = new Surface( 155, 40);
+    var surface3 = new Surface( btn_x, btn_y);
     surface3.context.fillStyle = "red";
-    surface3.context.fillRect (0, 0, 155, 40);
+    surface3.context.fillRect (0, 0, btn_x, btn_y);
 
-    var continue_button = new Sprite(155, 40);
+    var continue_button = new Sprite(btn_x, btn_y);
     continue_button.image = surface1;
     continue_button.moveTo(153,220);
 
-    var replay_button = new Sprite(155, 40);
+    var replay_button = new Sprite(btn_x, btn_y);
     replay_button.image = surface2;
     replay_button.moveTo(153,285);
 
-    var backStageSelect_button = new Sprite(155, 40);
+    var backStageSelect_button = new Sprite(btn_x, 40);
     backStageSelect_button.image = surface3;
     backStageSelect_button.moveTo(153,350);
 
     clear_msg = new Label();
   	clear_msg.color = 'black';
-  	clear_msg.font = "normal normal 40px/1.0 monospace";
+  	clear_msg.font = "40px 'Russo One', sans-serif";
   	clear_msg.text = "Game Clear";
     clear_msg.moveTo(120,80);
 
     score_msg = new Label();
   	score_msg.color = 'black';
-  	score_msg.font = "normal normal 30px/1.0 monospace";
+  	score_msg.font = "30px 'Russo One', sans-serif";
   	score_msg.text = "SCORE : "+scores;
     score_msg.moveTo(130,135);
 
     msg1 = new Label();
   	msg1.color = 'white';
-  	msg1.font = "normal normal 25px/1.0 monospace";
-  	msg1.text = "次ステージ";
-    msg1.moveTo(175,230);
+  	msg1.font = "25px 'Russo One', sans-serif";
+  	msg1.text = "もう一度遊ぶ";
+    msg1.moveTo(160,230);
 
     msg2 = new Label();
   	msg2.color = 'white';
-  	msg2.font = "normal normal 25px/1.0 monospace";
+  	msg2.font = "25px 'Russo One', sans-serif";
   	msg2.text = "ツイートする";
-    twitText();
     msg2.moveTo(165,295);
 
     msg3 = new Label();
   	msg3.color = 'white';
-  	msg3.font = "normal normal 25px/1.0 monospace";
+  	msg3.font = "25px 'Russo One', sans-serif";
   	msg3.text = "セレクト画面へ";
     msg3.moveTo(153,360);
 
@@ -349,15 +364,19 @@ addEventListener( 'load', function() {
     arrow.x = arrow_pos[0];
     arrow.y = arrow_pos[1];
 
+
     scene.addChild(continue_button);
     scene.addChild(replay_button);
     scene.addChild(backStageSelect_button);
+
     scene.addChild(clear_msg);
     scene.addChild(score_msg);
     scene.addChild(msg1);
     scene.addChild(msg2);
     scene.addChild(msg3);
+
     scene.addChild(arrow);
+      var i =0;
 
     var speed = 2;
     var frame_cnt = 5;
@@ -385,13 +404,22 @@ addEventListener( 'load', function() {
       if(game.input.c){//Spaceキーで決定
         switch (this.y) {
           case arrow_pos[1]:
-            game.popScene(this);
-            bgmsound.stop();
-            game.replaceScene(game.mainScene() );
+            window.location.replace("stage3.html");
             break;
+
           case arrow_pos[2]:
-            break;
+            //Twitter処理
+
+            if(i == 0){
+              twitText();
+              i =1;
+              game.popScene(this);
+              bgmsound.stop();
+              game.replaceScene(game.ClearScene() );
+            }
+
           case arrow_pos[3]:
+            //console.log("select");
             window.history.back();
             break;
         }
@@ -400,6 +428,7 @@ addEventListener( 'load', function() {
 
     return scene;
   }
+
   //-------------------------------------------------------------------------------------------------------------------------------------------------------
   
   //-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -407,7 +436,8 @@ addEventListener( 'load', function() {
   game.mainScene = function() {
     var scene = new Scene();        //シーンを作成
     //scene.backgroundColor = '#00BFFF';    //ブロックおいてないとこの色（前まで白色だったとこ）
-    scene.backgroundColor = 'skyblue';
+    //scene.backgroundColor = 'skyblue';
+    scene.backgroundColor = 'coral';
 
     //========================
     //  マップデータ見栄え用　マップ画像から左上から0,1,0,2.....と表示するマップチップを変更できる
@@ -441,7 +471,7 @@ addEventListener( 'load', function() {
             [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
             [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
             [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,32,32,32,32,32,32,32,32,32, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],
-            [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 9,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16],
+            [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16],
             [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16],
             [16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16, 8, 8, 8, 8,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16]
     ];
@@ -586,7 +616,7 @@ addEventListener( 'load', function() {
 
     //Gilbert設定----------------------------------------------------------------------------------------------------------------------
     var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
-    var Gil_firstposition = [64,400]//プレイヤーの初期スポーン位置 //64,400
+    var Gil_firstposition = [2350,400]//プレイヤーの初期スポーン位置 //64,400
     Gilbert.image = game.assets["../img/character/Gilbert2.png"];
     Gilbert.x = Gil_firstposition[0];
     Gilbert.y = Gil_firstposition[1];
@@ -827,6 +857,7 @@ addEventListener( 'load', function() {
         
         
         //BreathクラスとGilbertクラスとの当たり判定
+        /*
         Breath.intersect(Gilbert).forEach(function(pair)
         {
             //pair[0]: Breathのインスタンス
@@ -835,6 +866,7 @@ addEventListener( 'load', function() {
             pair[1].remove();
             invincible_flag = true;
         });
+        */
 
         //無敵時間管理
         if(invincible_flag == true){ //無敵フラグがtrueなら
@@ -945,18 +977,26 @@ addEventListener( 'load', function() {
     var enemy1max = enemy1x + 50;
     var Enemy1 = Class.create( Sprite, {
         initialize: function() {
-            Sprite.call(this, 20, 30);
+            Sprite.call(this, 20, 28);
             this.image = game.assets["../img/character/enemy1.png"];
             this.moveTo(enemy1x, enemy1y);
             this.frame = 1;
         },
         onenterframe: function() {
             this.x += enemydx;
-            this.frame = (this.age%15) + 1;
+            if(enemydx > 0){
+                this.frame = (this.age%3) + 12;
+            }else{
+                this.frame = (this.age%3) + 6;
+            }
             if(this.x >= enemy1max || this.x <= enemy1min){
                 enemydx = -enemydx;
             }
             
+            // もしゴール後に敵が残っていたら消す
+            if(goal_flag == true){
+                this.remove();
+            }
             
             //Gilbertとの当たり判定
             if(invincible_flag == false){
@@ -979,18 +1019,26 @@ addEventListener( 'load', function() {
     var side1max = side1x + 50;
     var SideEnemy1 = Class.create( Sprite, {
         initialize: function() {
-            Sprite.call(this, 20, 30);
+            Sprite.call(this, 20, 28);
             this.image = game.assets["../img/character/enemy1.png"];
             this.moveTo(side1x, side1y);
             this.frame = 1;
         },
         onenterframe: function() {
             this.x += enemydx;
-            this.frame = (this.age%15) + 1;
+            if(enemydx > 0){
+                this.frame = (this.age%3) + 12;
+            }else{
+                this.frame = (this.age%3) + 6;
+            }
             if(this.x >= side1max || this.x <= side1min){
                 enemydx = -enemydx;
             }
             
+            // もしゴール後に敵が残っていたら消す
+            if(goal_flag == true){
+                this.remove();
+            }
             
             //Gilbertとの当たり判定
             if(invincible_flag == false){
@@ -1008,23 +1056,31 @@ addEventListener( 'load', function() {
       
        //敵キャラ１(3)初期設定-----------------------------------------------------------------------------------------------
     var side2x = 1020;
-    var side2y = 342;
+    var side2y = 343;
     var side2min = side2x - 50;
     var side2max = side2x + 50;
     var SideEnemy2 = Class.create( Sprite, {
         initialize: function() {
-            Sprite.call(this, 20, 30);
+            Sprite.call(this, 20, 28);
             this.image = game.assets["../img/character/enemy1.png"];
             this.moveTo(side2x, side2y);
             this.frame = 1;
         },
         onenterframe: function() {
             this.x += enemydx;
-            this.frame = (this.age%15) + 1;
+            if(enemydx > 0){
+                this.frame = (this.age%3) + 12;
+            }else{
+                this.frame = (this.age%3) + 6;
+            }
             if(this.x >= side2max || this.x <= side2min){
                 enemydx = -enemydx;
             }
             
+            // もしゴール後に敵が残っていたら消す
+            if(goal_flag == true){
+                this.remove();
+            }
             
             //Gilbertとの当たり判定
             if(invincible_flag == false){
@@ -1047,18 +1103,26 @@ addEventListener( 'load', function() {
     var side3max = side3x + 50;
     var SideEnemy3 = Class.create( Sprite, {
         initialize: function() {
-            Sprite.call(this, 20, 30);
+            Sprite.call(this, 20, 28);
             this.image = game.assets["../img/character/enemy1.png"];
             this.moveTo(side3x, side3y);
             this.frame = 1;
         },
         onenterframe: function() {
             this.x += enemydx;
-            this.frame = (this.age%15) + 1;
+            if(enemydx > 0){
+                this.frame = (this.age%3) + 12;
+            }else{
+                this.frame = (this.age%3) + 6;
+            }
             if(this.x >= side3max || this.x <= side3min){
                 enemydx = -enemydx;
             }
             
+            // もしゴール後に敵が残っていたら消す
+            if(goal_flag == true){
+                this.remove();
+            }
             
             //Gilbertとの当たり判定
             if(invincible_flag == false){
@@ -1081,17 +1145,29 @@ addEventListener( 'load', function() {
       var enemy2max = enemy2y + 50;
       var Enemy2 = Class.create( Sprite, {
           initialize: function() {
-              Sprite.call(this, 20, 30);
+              Sprite.call(this, 30, 23);
               this.image = game.assets['../img/character/enemy2.png'];
               this.moveTo(enemy2x, enemy2y);
               this.frame = 1;
           },
           onenterframe: function() {
               this.y += enemydy;
-              this.frame = (this.age%15) + 1;
+              if(this.x > Gilbert.x ){
+                  this.frame = (this.age % 3) + 6;
+              }else if(this.x < Gilbert.x) {
+                  this.frame = (this.age % 3) + 12;
+              }else{
+                  this.frame = this.age % 3;
+              }
               if(this.y >= enemy2max || this.y <= enemy2min){
                   enemydy = -enemydy;
               }
+              
+              // もしゴール後に敵が残っていたら消す
+              if(goal_flag == true){
+                  this.remove();
+              }
+
             
               //Gilbertとの当たり判定
               if(invincible_flag == false){
@@ -1108,6 +1184,7 @@ addEventListener( 'load', function() {
       //---------------------------------------------------------------------------------------------------------------------
       
       //ブレス（ドラゴン）設定--------------------------------------------------------------------------------------------------
+      /*
       var breathline = true;
       var breathX = dragon1x;
       var breathY = dragon1y;   //ブレスのX座標とY座標
@@ -1142,6 +1219,7 @@ addEventListener( 'load', function() {
               //}
           }
       });
+      */
       //------------------------------------------------------------------------------------------------------------------------
       
       
@@ -1169,7 +1247,7 @@ addEventListener( 'load', function() {
                     }else if(Gilbert.x < this.x){
                         this.x -= dragondx;
                         this.frame = (this.age%3) + 6;
-                        breathline = false;
+                        //breathline = false;
                     }else{
                         this.x = Gilbert.x;
                         this.y = Gilbert.y;
@@ -1195,6 +1273,7 @@ addEventListener( 'load', function() {
             //}
             
             //ブレス処理
+            /*
             if(breath_flag==true && dragon_flag==true){
                 //前に弾を打った時から10フレームが経過時
                 HitABreath();
@@ -1210,6 +1289,12 @@ addEventListener( 'load', function() {
                 breath_count++;     //フレームのカウントを行う
             }
             if(breath_count==20) breath_flag=true;       //フレームカウントが10になった時、弾を打てるようにする
+            */
+            
+            // もしゴール後に敵が残っていたら消す
+            if(goal_flag == true){
+                this.remove();
+            }
 
             
             //Gilbertとの当たり判定
@@ -1248,7 +1333,7 @@ addEventListener( 'load', function() {
                     }else if(Gilbert.x < this.x){
                         this.x -= dragondx;
                         this.frame = (this.age%3) + 6;
-                        breathline = false;
+                        //breathline = false;
                     }else{
                         this.x = Gilbert.x;
                         this.y = Gilbert.y;
@@ -1274,6 +1359,7 @@ addEventListener( 'load', function() {
             //}
             
             //ブレス処理
+            /*
             if(breath_flag==true && dragon_flag==true){
                 //前に弾を打った時から10フレームが経過時
                 HitABreath();
@@ -1289,6 +1375,12 @@ addEventListener( 'load', function() {
                 breath_count++;     //フレームのカウントを行う
             }
             if(breath_count==20) breath_flag=true;       //フレームカウントが10になった時、弾を打てるようにする
+            */
+
+            // もしゴール後に敵が残っていたら消す
+            if(goal_flag == true){
+                this.remove();
+            }
 
             
             //Gilbertとの当たり判定

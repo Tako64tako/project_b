@@ -420,15 +420,14 @@ addEventListener( 'load', function() {
       if(game.input.c){//Spaceキーで決定
         switch (this.y) {
           case arrow_pos[1]:
-            //console.log("retry");
-            game.popScene(this);
-            bgmsound.stop();
-            game.replaceScene(game.mainScene() );
+						//次のステージへ移動
+						window.location.replace("stage2.html");
+
             break;
 
           case arrow_pos[2]:
             //Twitter処理
-            
+
             if(i == 0){
               twitText();
               i =1;
@@ -945,7 +944,7 @@ addEventListener( 'load', function() {
             if(this.x >= enemy1max || this.x <= enemy1min){
                 enemydx = -enemydx;
             }
-            
+
             //Gilbertとの当たり判定
             if(invincible_flag == false){
                 if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){
@@ -988,7 +987,7 @@ addEventListener( 'load', function() {
               if(this.y >= enemy2max || this.y <= enemy2min){
                   enemydy = -enemydy;
               }
-            
+
               //Gilbertとの当たり判定
               if(invincible_flag == false){
                   if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){

@@ -343,7 +343,11 @@ addEventListener( 'load', function() {
     msg1 = new Label();
   	msg1.color = 'white';
   	msg1.font = "25px 'Russo One', sans-serif";
+<<<<<<< HEAD
   	msg1.text = "次のステージへ";
+=======
+  	msg1.text = "次のステージ";
+>>>>>>> c6f5e466492e48b17a28a455f88676c117fb3301
     msg1.moveTo(160,230);
 
     msg2 = new Label();
@@ -543,7 +547,7 @@ addEventListener( 'load', function() {
     scoresLabel.font = "16px 'Russo One', sans-serif";
 
     //制限時間表示-------------------------------------------------------------------------------------------------------------
-    game.time = 300;
+    game.time = 100;
     timesLabel.text = '制限時間：' + game.time;
     timesLabel.x = 350;
     timesLabel.y = 5;
@@ -626,7 +630,7 @@ addEventListener( 'load', function() {
     Gilbert.jumpFlg = false;//ジャンプしてるかどうかのフラグ
     Gilbert.jumpingFlg = false;//ジャンプ中がどうかのフラグ
     Gilbert.jumpPower = 8; //プレイヤーのジャンプ力　大きくするほど高く飛べる // 8
-    Gilbert.lives = 5; // 残機数
+    Gilbert.lives = 3; // 残機数
     Gilbert.addEventListener(Event.ENTER_FRAME, function(e) {
                 //bgm.loop();
         bgmsound.play();
@@ -782,6 +786,8 @@ addEventListener( 'load', function() {
             stage.addChild(dragon1);
             dragon2 = new Dragon2;
             stage.addChild(dragon2);
+            tateenemy1 = new TateEnemy1;
+            stage.addChild(tateenemy1);
             i = 1;
         }
 
@@ -824,6 +830,17 @@ addEventListener( 'load', function() {
         
         //BulletクラスとEnemy2クラスとの当たり判定
         Bullet.intersect(Enemy2).forEach(function(pair)
+        {
+            //pair[0]: Bulletのインスタンス
+            //pair[1]: Enemy1のインスタンス
+            
+            scores += 300;
+            pair[0].remove();
+            pair[1].remove();
+
+        });
+        
+        Bullet.intersect(TateEnemy1).forEach(function(pair)
         {
             //pair[0]: Bulletのインスタンス
             //pair[1]: Enemy1のインスタンス
@@ -1182,6 +1199,51 @@ addEventListener( 'load', function() {
           }
       });
       //---------------------------------------------------------------------------------------------------------------------
+      
+      //敵キャラ２(2)初期設定-----------------------------------------------------------------------------------------------------------vertical
+      var tate1x = 1850;
+      var tate1y = 355;
+      var tate1min = tate1y - 50;
+      var tate1max = tate1y + 50;
+      var TateEnemy1 = Class.create( Sprite, {
+          initialize: function() {
+              Sprite.call(this, 30, 23);
+              this.image = game.assets['../img/character/enemy2.png'];
+              this.moveTo(tate1x, tate1y);
+              this.frame = 1;
+          },
+          onenterframe: function() {
+              this.y += enemydy;
+              if(this.x > Gilbert.x ){
+                  this.frame = (this.age % 3) + 6;
+              }else if(this.x < Gilbert.x) {
+                  this.frame = (this.age % 3) + 12;
+              }else{
+                  this.frame = this.age % 3;
+              }
+              if(this.y >= tate1max || this.y <= tate1min){
+                  enemydy = -enemydy;
+              }
+              
+              // もしゴール後に敵が残っていたら消す
+              if(goal_flag == true){
+                  this.remove();
+              }
+            
+              //Gilbertとの当たり判定
+              if(invincible_flag == false){
+                  if(Gilbert.x - this.x > -25 && Gilbert.x - this.x < 25){
+                      if(Gilbert.y - this.y > -21 && Gilbert.y - this.y < 21){
+                          Gilbert.lives -= 1; //Gilbertの残機を1減らす
+                          invincible_flag = true; //無敵フラグをtrueに
+                          Gilbert.opacity = 0.7; //Gilbertの透明度を0.7にする
+                      }
+                  }
+              }
+          }
+      });
+      //---------------------------------------------------------------------------------------------------------------------
+      
       
       //ブレス（ドラゴン）設定--------------------------------------------------------------------------------------------------
       /*

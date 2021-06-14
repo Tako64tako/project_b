@@ -834,7 +834,6 @@ addEventListener( 'load', function() {
         if(invincible_flag == true){ //無敵フラグがtrueなら
 
           invincible_count ++ //無敵時間をカウント
-
         }
         if(invincible_count == 30){ //無敵時間が3秒になったら
           invincible_flag = false; //無敵を解除

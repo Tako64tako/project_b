@@ -343,7 +343,7 @@ addEventListener( 'load', function() {
     msg1 = new Label();
   	msg1.color = 'white';
   	msg1.font = "25px 'Russo One', sans-serif";
-  	msg1.text = "もう一度遊ぶ";
+  	msg1.text = "次のステージへ";
     msg1.moveTo(160,230);
 
     msg2 = new Label();
@@ -616,7 +616,7 @@ addEventListener( 'load', function() {
 
     //Gilbert設定----------------------------------------------------------------------------------------------------------------------
     var Gilbert = new Sprite(32, 32);//プレイヤークラスenchant.jsではSpriteで管理
-    var Gil_firstposition = [2350,400]//プレイヤーの初期スポーン位置 //64,400
+    var Gil_firstposition = [64,400]//プレイヤーの初期スポーン位置 //64,400
     Gilbert.image = game.assets["../img/character/Gilbert2.png"];
     Gilbert.x = Gil_firstposition[0];
     Gilbert.y = Gil_firstposition[1];
